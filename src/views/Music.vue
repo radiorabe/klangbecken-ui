@@ -1,17 +1,109 @@
 <template>
   <div class="music">
-    <h1>This the music page</h1>
+    <h2>Playlist - Music</h2>
+
+    <h3>Upload</h3>
+    <input type="file" multiple accept="audio/*" @change="upload">
+    <progress :value="progress"></progress>
+
+    <h3>Preview Player</h3>
+    <div>
+      <audio :src="preview_path" v-on:ended="ended" autoplay controls></audio>
+      {{preview_name}}
+    </div>
+    <h3>Playlist</h3>
+    Order by
+    <select v-model="order_key">
+      <option value="-import_timestamp" selected="selected">Import-Datum (neuste zuerst)</option>
+      <option value="+artist">Artist (aufsteigend)</option>
+    </select>
+
+    Search: <input type="text" v-model="search">
+    <ul>
+      <li v-for="value in music" :key="value.id">
+        {{value.artist}} - {{value.title}} - {{value.original_filename}}
+        <button @click="preview(value)">preview</button>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
+  name: 'music',
+  data() {
+    return {
+      order_key: '-import_timestamp',
+      progress: 0,
+      preview_path: '',
+      preview_name: '',
+      search: '',
+    }
+  },
+  created() {
+  },
+  computed: {
+    loggedIn() {
+      return this.$parent.loggedIn
+    },
+    music() {
+      let obj = this.$parent.data
+      let result =  Object.keys(obj)
+          .filter( key => obj[key].playlist === 'music' )
+          .reduce((res, key) => res.concat([obj[key]]), [])
+      let key = this.order_key.substr(1)
+      let direction = this.order_key[0] === '+' ? 1 : -1
+      result.sort((left, right) => {
+        left = left[key]
+        right = right[key]
+        if (left < right) {
+          return -1 * direction
+        } else if (right < left) {
+          return 1 * direction
+        } else {
+          return 0
+        }
+      })
+      return result
+    }
+  },
+  methods: {
+    async upload(ev) {
+      this.progress = 0
+      let files = ev.srcElement.files
+      for (let file of files) {
+        let formData = new FormData();
+        formData.append('file', file);
+        try {
+          await axios.post( '/api/music/',
+          formData,
+          {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+          })
+        } catch (err) {
+          // nothing
+        }
+        this.progress += 1 / files.length
+      }
+        //this.files = this.$refs.myFiles.files
+
+      this.progress = 1
+
+    },
+    preview(entry) {
+      this.preview_path = `/data/${entry.playlist}/${entry.id}${entry.ext}`
+      this.preview_name = `${entry.artist} - ${entry.title}`
+    },
+    ended() {
+      this.preview_path = ''
+      this.preview_name = ''
+    },
+
   }
 }
 </script>
