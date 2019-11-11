@@ -8,8 +8,12 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    redirect: '/music'
+  },
+  {
+    path: '/music',
     name: 'music',
-    component: Music
+    component: Music,
   },
   {
     path: '/jingles',
