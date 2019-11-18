@@ -21,7 +21,10 @@ export default {
       loggedIn: false,
       username: '',
       polling: null,
-      loginform: {},
+      loginform: {
+        username: '',
+        password: ''
+      },
       token: localStorage.getItem('token') || ''
     }
   },
@@ -54,7 +57,11 @@ export default {
 
     async login() {
       try {
-        let response = await axios.post('/api/login/', this.loginform)
+        let body = new URLSearchParams()
+        body.append('login', this.loginform.username)
+        body.append('password', this.loginform.password)
+
+        let response = await axios.post('/api/login/', body)
         if (response.status === 200) {
           this.loggedIn = true;
           this.loginform = {}
@@ -83,7 +90,6 @@ export default {
   },
   watch: {
       token(new_token) {
-        console.log(new_token)
         if (new_token) {
           axios.defaults.headers.common['Authorization'] = `Bearer ${new_token}`
           localStorage.setItem('token', new_token)
