@@ -22,6 +22,7 @@ export default {
       username: '',
       polling: null,
       loginform: {},
+      token: localStorage.getItem('token') || ''
     }
   },
   async created() {
@@ -33,17 +34,14 @@ export default {
   },
   methods: {
     async renew() {
-      let token = localStorage.getItem('token')
-      if (token) {
+      if (this.token) {
         try {
-          let response = await axios.post('/api/renew_token/', {token})
+          let response = await axios.post('/api/renew_token/', {token: this.token})
           let new_token = response.data.token
-          localStorage.setItem('token', new_token)
-          axios.defaults.headers.common['Authorization'] = `Bearer ${new_token}`
-
           let payload = JSON.parse(atob(new_token.split('.')[1]))
           this.username = payload.user
           this.loggedIn = true
+          this.token = new_token
           return  // We're good
         } catch (err) {
           // Handle error case below
@@ -51,7 +49,7 @@ export default {
       }
       this.loggedIn = false
       this.username = ''
-      localStorage.removeItem('token')
+      this.token = ''
     },
 
     async login() {
@@ -60,16 +58,15 @@ export default {
         if (response.status === 200) {
           this.loggedIn = true;
           this.loginform = {}
-          let token = response.data.token
+          let new_token = response.data.token
           // Extract payload
-          let payload = token.split('.')[1]
+          let payload = new_token.split('.')[1]
           // Convert back to 'normal' base64
           payload = payload.replace(/-/g, '+').replace(/_/g, '/')
           // Decode and parse
           payload = JSON.parse(atob(payload))
           this.username = payload.user
-          localStorage.setItem('token', token)
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+          this.token = new_token
         } else {
           alert('Invalid username or password')
         }
@@ -81,9 +78,21 @@ export default {
     logout() {
       this.loggedIn = false
       this.username = ''
-      localStorage.removeItem('token')
+      this.token = ''
     },
   },
+  watch: {
+      token(new_token) {
+        console.log(new_token)
+        if (new_token) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${new_token}`
+          localStorage.setItem('token', new_token)
+        } else {
+          delete axios.defaults.headers.common['Authorization']
+          localStorage.removeItem('token')
+        }
+      }
+    }
 }
 </script>
 
