@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li>On Air: {{onair ? 'yes' : 'no'}}</li>
-    <li>Aktueller Song: ...</li>
+    <li>Aktueller Song: {{current.artist}} - {{current.title}}</li>
   </ul>
 </template>
 
@@ -14,8 +14,10 @@ export default {
   created() {
     let poll = async () => {
       try {
-        let response = await axios.get('/data/onair.json')
+        let response = await axios.get('/data/log/onair.json')
         this.onair = response.data
+        response = await axios.get('/data/log/current.json')
+        this.current = response.data
       } catch (err) {
         // Nothing yet
       }
@@ -32,6 +34,7 @@ export default {
   data() {
     return {
       onair: false,
+      current:{},
       polling: null,
     }
   },
