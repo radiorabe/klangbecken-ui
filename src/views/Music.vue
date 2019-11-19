@@ -78,19 +78,16 @@ export default {
         let formData = new FormData();
         formData.append('file', file);
         try {
-          await axios.post( '/api/music/',
-          formData,
-          {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-          })
+          await axios.post(
+            '/api/music/',
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' }}
+          )
         } catch (err) {
           // nothing
         }
         this.progress += 1 / files.length
       }
-        //this.files = this.$refs.myFiles.files
 
       this.progress = 1
 
