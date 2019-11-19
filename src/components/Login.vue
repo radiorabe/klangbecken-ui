@@ -4,45 +4,34 @@
     <span v-else>
       username: <input type="text" placeholder="Username" v-model="loginform.username"><br/>
       password: <input type="password" placeholder="Password" v-model="loginform.password">
-      <button @click="login">Login</button>
+      <button @click="tryLogin">Login</button>
     </span>
   </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import axios from 'axios'
-
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: 'Login',
   data() {
     return {
-      loginform: {
-      },
+      loginform: {},
     }
   },
   computed: {
     ...mapGetters(['isLoggedIn', 'username'])
   },
   methods: {
-    async login() {
+    async tryLogin() {
       try {
-        let body = new URLSearchParams()
-        body.append('login', this.loginform.username)
-        body.append('password', this.loginform.password)
-
-        let response = await axios.post('/api/login/', body)
+        await this.login(this.loginform)
         this.loginform = {}
-        let new_token = response.data.token
-        this.$store.commit('setToken', new_token)
-      } catch (error) {
+      } catch (err) {
         this.loginform.password = ''
       }
     },
-    logout() {
-      this.$store.commit('removeToken')
-    }
+    ...mapActions(['login', 'logout']),
   },
 }
 </script>
