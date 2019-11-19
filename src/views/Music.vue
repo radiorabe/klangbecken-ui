@@ -31,6 +31,7 @@
 <script>
 import axios from 'axios'
 // @ is an alias to /src
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'music',
@@ -46,11 +47,9 @@ export default {
   created() {
   },
   computed: {
-    loggedIn() {
-      return this.$parent.loggedIn
-    },
+    ...mapGetters(['isLoggedIn', 'data']),
     music() {
-      let obj = this.$parent.data
+      let obj = this.data
       let result =  Object.keys(obj)
           .filter( key => obj[key].playlist === 'music' )
           .reduce((res, key) => res.concat([obj[key]]), [])

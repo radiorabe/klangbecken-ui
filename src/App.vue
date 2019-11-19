@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Login from '@/components/Login.vue'
 import Status from '@/components/Status.vue'
 
@@ -33,12 +32,6 @@ export default {
     }
   },
   async created() {
-    try {
-      let response = await axios.get('/data/index.json')
-      this.data = response.data
-    } catch (err) {
-      // Nothing yet
-    }
 
 
     this.$store.dispatch('renewToken')
