@@ -20,6 +20,8 @@
 import Login from '@/components/Login.vue'
 import Status from '@/components/Status.vue'
 
+import axios from 'axios'
+import {mapActions} from 'vuex'
 
 const TOKEN_RENEW_TIMEOUT = 10 * 60 * 1000   // ten minutes
 
@@ -32,15 +34,15 @@ export default {
     }
   },
   async created() {
-
-
-    this.$store.dispatch('renewToken')
-    this.tokenInterval = setInterval(() => {
-      this.$store.dispatch('renewToken')
-    }, TOKEN_RENEW_TIMEOUT)
+    this.loadData()
+    this.renewToken()
+    this.tokenInterval = setInterval(this.renewToken, TOKEN_RENEW_TIMEOUT)
   },
   beforeDestroy () {
     clearInterval(this.tokenInterval)
+  },
+  methods: {
+    ...mapActions(['loadData', 'renewToken', 'logout']),
   },
   components: {
     Login,
