@@ -23,6 +23,7 @@
       <li v-for="value in music" :key="value.id">
         {{value.artist}} - {{value.title}} - {{value.original_filename}}
         <button @click="preview(value)">preview</button>
+        <button @click="remove(value)">delete</button>
       </li>
     </ul>
   </div>
@@ -102,6 +103,14 @@ export default {
       this.preview_path = ''
       this.preview_name = ''
     },
+    async remove(entry) {
+      try {
+        await axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`)
+        this.$store.commit('removeItem', entry.id)
+      } catch (err) {
+        //Nothing
+      }
+    }
 
   }
 }
