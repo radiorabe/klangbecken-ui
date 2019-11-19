@@ -37,6 +37,13 @@ export default {
     this.loadData()
     this.renewToken()
     this.tokenInterval = setInterval(this.renewToken, TOKEN_RENEW_TIMEOUT)
+    axios.interceptors.response.use((resp) => resp, async (err) => {
+      if (err.response.status === 401) {
+        this.logout()
+        // FIXME: notification
+      }
+      throw err
+    })
   },
   beforeDestroy () {
     clearInterval(this.tokenInterval)
