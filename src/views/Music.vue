@@ -78,11 +78,12 @@ export default {
         let formData = new FormData();
         formData.append('file', file);
         try {
-          await axios.post(
+          let response = await axios.post(
             '/api/music/',
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' }}
           )
+          this.$store.commit('addItem', response.data)
         } catch (err) {
           // nothing
         }

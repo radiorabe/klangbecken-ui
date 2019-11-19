@@ -16,7 +16,9 @@ export default {
       state.data = newData
     },
     addItem: (state, item) => {
-      state.data[item.id] = item
+      for (let key in item) {
+        Vue.set(state.data, key, item[key])
+      }
     },
     removeItem: (state, itemId) => {
       Vue.delete(state.data, itemId)
