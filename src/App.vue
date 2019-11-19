@@ -9,10 +9,9 @@
 
     <h3>Navigation</h3>
     <div id="nav">
-      <router-link to="Music" :loggedIn="loggedIn">Music</router-link> |
+      <router-link to="Music">Music</router-link> |
       <router-link to="Jingles">Jingles</router-link>
     </div>
-
     <router-view/>
   </div>
 </template>
@@ -22,8 +21,17 @@ import axios from 'axios'
 import Login from '@/components/Login.vue'
 import Status from '@/components/Status.vue'
 
+
+const TOKEN_RENEW_TIMEOUT = 10 * 60 * 1000   // ten minutes
+
 export default {
   name: 'app',
+  data() {
+    return {
+      data: {},
+      tokenInterval: null,
+    }
+  },
   async created() {
     try {
       let response = await axios.get('/data/index.json')
@@ -31,15 +39,15 @@ export default {
     } catch (err) {
       // Nothing yet
     }
+
+
+    this.$store.dispatch('renewToken')
+    this.tokenInterval = setInterval(() => {
+      this.$store.dispatch('renewToken')
+    }, TOKEN_RENEW_TIMEOUT)
   },
-  methods: {
-  },
-  data() {
-    return {
-      loggedIn: false,
-      username: '',
-      data: {},
-    }
+  beforeDestroy () {
+    clearInterval(this.tokenInterval)
   },
   components: {
     Login,
