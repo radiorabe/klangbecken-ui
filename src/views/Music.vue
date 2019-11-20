@@ -3,7 +3,7 @@
     <h2>Playlist - Music</h2>
 
     <h3>Upload</h3>
-    <input type="file" multiple accept="audio/*" @change="upload">
+    <input type="file" multiple accept="audio/*" @change="upload" :disabled="!isLoggedIn">
     <progress :value="progress"></progress>
 
     <h3>Preview Player</h3>
@@ -23,8 +23,8 @@
       <li v-for="value in music" :key="value.id">
         {{value.artist}} - {{value.title}} - {{value.original_filename}}
         <button @click="preview(value)">preview</button>
-        <button @click="remove(value)">delete</button>
-        <button @click="playNext(value)">play next</button>
+        <button @click="remove(value)" :disabled="!isLoggedIn">delete</button>
+        <button @click="playNext(value)" :disabled="!isLoggedIn">play next</button>
       </li>
     </ul>
   </div>
@@ -75,6 +75,7 @@ export default {
     async upload(ev) {
       this.progress = 0
       let files = ev.srcElement.files
+      // FIXME: async for loop
       for (let file of files) {
         let formData = new FormData();
         formData.append('file', file);
