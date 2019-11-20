@@ -35,32 +35,10 @@ export default {
       return this.$route.params.month
     },
     nextMonth() {
-      let [year, month] = this.month.split('-').map((s) => parseInt(s, 10))
-      if (month === 12) {
-        month = 1
-        year += 1
-      } else {
-        month += 1
-      }
-      if (month < 10) {
-        return `${year}-0${month}`
-      } else {
-        return `${year}-${month}`
-      }
+      return this.adjacentMonth(1)
     },
     prevMonth() {
-      let [year, month] = this.month.split('-').map((s) => parseInt(s, 10))
-      if (month === 1) {
-        month = 12
-        year -= 1
-      } else {
-        month -= 1
-      }
-      if (month < 10) {
-        return `${year}-0${month}`
-      } else {
-        return `${year}-${month}`
-      }
+      return this.adjacentMonth(-1)
     }
   },
   created() {
@@ -69,6 +47,12 @@ export default {
   beforeDestroy () {
   },
   methods: {
+    adjacentMonth(direction) {
+      let [year, month] = this.month.split('-').map((s) => parseInt(s, 10))
+      let newMonth = (month + 11 + direction) % 12 + 1
+      let newYear = year + Math.floor((month + 11 + direction) / 12) - 1
+      return `${newYear}-${newMonth}`
+    },
     async load() {
       this.loading = true
       try {

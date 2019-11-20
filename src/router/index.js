@@ -32,7 +32,7 @@ const routes = [
     },
   },
   {
-    path: '/stats/:month(\\d{4}-\\d{2})',
+    path: '/stats/:month(\\d{4}-\\d{1,2})',
     name: 'stats',
     component: Stats,
   },
