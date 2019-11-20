@@ -1,8 +1,8 @@
 <template>
   <div>
     <h2>Statistics for {{month}}</h2>
-    <router-link :to="{name: 'stats', params: {month: nextMonth}}">&lt; {{nextMonth}}</router-link> |
-    <router-link :to="{name: 'stats', params: {month: prevMonth}}">{{prevMonth}} &gt;</router-link>
+    <router-link :to="{name: 'stats', params: {month: prevMonth}}">&lt; {{prevMonth}}</router-link> |
+    <router-link :to="{name: 'stats', params: {month: nextMonth}}">{{nextMonth}} &gt;</router-link>
 
     <div v-if="loading">Loading</div>
     <table border="1" v-else-if="available">
