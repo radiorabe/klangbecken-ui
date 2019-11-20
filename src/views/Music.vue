@@ -24,6 +24,7 @@
         {{value.artist}} - {{value.title}} - {{value.original_filename}}
         <button @click="preview(value)">preview</button>
         <button @click="remove(value)">delete</button>
+        <button @click="playNext(value)">play next</button>
       </li>
     </ul>
   </div>
@@ -108,6 +109,15 @@ export default {
       } catch (err) {
         //Nothing
       }
+    },
+    async playNext(entry) {
+      try {
+        await axios.post(`/api/playnext/`, {file:`${entry.playlist}/${entry.id}${entry.ext}`})
+      } catch (err) {
+        //fail
+      }
+
+
     }
 
   }
