@@ -17,7 +17,6 @@ const routes = [
     path: '/music',
     name: 'music',
     component: Music,
-    props: {loggedIn: false},
   },
   {
     path: '/jingles',
