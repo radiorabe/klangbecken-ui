@@ -9,8 +9,9 @@
 
     <h3>Navigation</h3>
     <div id="nav">
-      <router-link to="Music">Music</router-link> |
-      <router-link to="Jingles">Jingles</router-link>
+      <router-link to="/music">Music</router-link> |
+      <router-link to="/jingles">Jingles</router-link> |
+      <router-link to="/stats">Stats</router-link>
     </div>
     <router-view/>
   </div>
