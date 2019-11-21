@@ -1,5 +1,5 @@
 <template>
-  <div class="jingles">
+  <div>
     <h2>Not Found</h2>
     The page <code>'{{path}}'</code> you requested does not exist.
   </div>
