@@ -14,7 +14,7 @@
       </template>
       <router-link to="/stats">Stats</router-link>
     </div>
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
