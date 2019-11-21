@@ -18,7 +18,7 @@
       <option value="+artist">Artist (aufsteigend)</option>
     </select>
 
-    Search: <input type="text" v-model="search">
+    Search: <input v-model="search" placeholder="Search ..."><button @click="search = ''">x</button>
     <ul>
       <li v-for="value in playlistData" :key="value.id">
         {{value.artist}} - {{value.title}} - {{value.original_filename}}
@@ -35,6 +35,7 @@ import axios from 'axios'
 import {mapGetters} from 'vuex'
 
 import playlists from '@/playlists'
+import index from '@/search'
 
 export default {
   name: 'playlist',
@@ -61,6 +62,9 @@ export default {
       return playlists[this.playlist].description
     },
     playlistData() {
+      if (this.search.trim() !== '') {
+        return index.search(this.search, {where: {'playlist': this.playlist}})
+      }
       let obj = this.data
       let result =  Object.keys(obj)
           .filter( key => obj[key].playlist === this.playlist )
