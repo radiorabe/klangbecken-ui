@@ -17,6 +17,7 @@ const routes = [
     name: 'playlist',
     path: `/:playlist(${Object.keys(playlists).join('|')})`,
     component: Playlist,
+    props: true,
   },
   {
     path: '/stats',

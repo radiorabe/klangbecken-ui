@@ -48,13 +48,11 @@ export default {
       search: '',
     }
   },
+  props: ['playlist'],
   created() {
   },
   computed: {
     ...mapGetters(['isLoggedIn', 'data']),
-    playlist() {
-      return this.$route.params.playlist
-    },
     playlistName() {
       return playlists[this.playlist].name
     },
