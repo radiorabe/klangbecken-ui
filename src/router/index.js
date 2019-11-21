@@ -1,27 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Music from '../views/Music.vue'
-import Jingles from '../views/Jingles.vue'
+import Playlist from '../views/Playlist.vue'
 import Stats from '../views/Stats.vue'
 import NotFound from '../views/NotFound.vue'
 
+import playlists from '@/playlists'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    redirect: '/music'
+    redirect: `${Object.keys(playlists)[0]}`,
   },
   {
-    path: '/music',
-    name: 'music',
-    component: Music,
-  },
-  {
-    path: '/jingles',
-    name: 'jingles',
-    component: Jingles,
+    name: 'playlist',
+    path: `/:playlist(${Object.keys(playlists).join('|')})`,
+    component: Playlist,
   },
   {
     path: '/stats',

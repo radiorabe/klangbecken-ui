@@ -1,6 +1,6 @@
 <template>
-  <div class="music">
-    <h2>Playlist - Music</h2>
+  <div>
+    <h2>Playlist - {{playlistName}}</h2>
 
     <h3>Upload</h3>
     <input type="file" multiple accept="audio/*" @change="upload" :disabled="!isLoggedIn">
@@ -20,7 +20,7 @@
 
     Search: <input type="text" v-model="search">
     <ul>
-      <li v-for="value in music" :key="value.id">
+      <li v-for="value in playlistData" :key="value.id">
         {{value.artist}} - {{value.title}} - {{value.original_filename}}
         <button @click="preview(value)">preview</button>
         <button @click="remove(value)" :disabled="!isLoggedIn">delete</button>
@@ -32,11 +32,12 @@
 
 <script>
 import axios from 'axios'
-// @ is an alias to /src
 import {mapGetters} from 'vuex'
 
+import playlists from '@/playlists'
+
 export default {
-  name: 'music',
+  name: 'playlist',
   data() {
     return {
       order_key: '-import_timestamp',
@@ -50,10 +51,19 @@ export default {
   },
   computed: {
     ...mapGetters(['isLoggedIn', 'data']),
-    music() {
+    playlist() {
+      return this.$route.params.playlist
+    },
+    playlistName() {
+      return playlists[this.playlist].name
+    },
+    playlistDescription() {
+      return playlists[this.playlist].description
+    },
+    playlistData() {
       let obj = this.data
       let result =  Object.keys(obj)
-          .filter( key => obj[key].playlist === 'music' )
+          .filter( key => obj[key].playlist === this.playlist )
           .reduce((res, key) => res.concat([obj[key]]), [])
       let key = this.order_key.substr(1)
       let direction = this.order_key[0] === '+' ? 1 : -1
@@ -81,7 +91,7 @@ export default {
         formData.append('file', file);
         try {
           let response = await axios.post(
-            '/api/music/',
+            `/api/${this.playlist}/`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' }}
           )
@@ -91,9 +101,7 @@ export default {
         }
         this.progress += 1 / files.length
       }
-
       this.progress = 1
-
     },
     preview(entry) {
       this.preview_path = `/data/${entry.playlist}/${entry.id}${entry.ext}`
@@ -117,10 +125,7 @@ export default {
       } catch (err) {
         //fail
       }
-
-
     }
-
   }
 }
 </script>

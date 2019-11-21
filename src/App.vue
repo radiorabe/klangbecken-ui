@@ -9,8 +9,9 @@
 
     <h3>Navigation</h3>
     <div id="nav">
-      <router-link to="/music">Music</router-link> |
-      <router-link to="/jingles">Jingles</router-link> |
+      <template v-for="(entry, playlist) in playlists" >
+        <router-link :to="`/${playlist}`" :key="playlist">{{entry.name}}</router-link> |
+      </template>
       <router-link to="/stats">Stats</router-link>
     </div>
     <router-view/>
@@ -21,6 +22,8 @@
 import Login from '@/components/Login.vue'
 import Status from '@/components/Status.vue'
 
+import playlists from '@/playlists'
+
 import axios from 'axios'
 import {mapActions} from 'vuex'
 
@@ -29,9 +32,15 @@ const TOKEN_RENEW_TIMEOUT = 10 * 60 * 1000   // ten minutes
 export default {
   name: 'app',
   data() {
+    let pls = {}
+    for (let playlist in playlists) {
+      pls[playlist] = { name: playlists[playlist].name }
+    }
+
     return {
       data: {},
       tokenInterval: null,
+      playlists: pls,
     }
   },
   async created() {
