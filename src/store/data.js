@@ -31,7 +31,7 @@ export default {
     },
     modifyItem: (state, itemId, modifications) => {
       for (let key in modifications) {
-        state[itemId][key] = modifications[key]
+        Vue.set(state.data[itemId], key, modifications[key])
       }
       index.update(state.data[itemId])
     },
