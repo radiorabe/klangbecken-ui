@@ -30,10 +30,8 @@ export default {
       loading: true
     }
   },
+  props: ['month'],
   computed:{
-    month() {
-      return this.$route.params.month
-    },
     nextMonth() {
       return this.adjacentMonth(1)
     },
@@ -66,11 +64,6 @@ export default {
       }
       this.loading = false
     },
-  },
-  watch: {
-    '$route'() {
-      this.load()
-    }
   },
 }
 </script>
