@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Playlist from '../views/Playlist.vue'
-import Stats from '../views/Stats.vue'
-import NotFound from '../views/NotFound.vue'
+
+import Playlist from '@/views/Playlist.vue'
+import Stats from '@/views/Stats.vue'
+import NotFound from '@/views/NotFound.vue'
 
 import playlists from '@/playlists'
 

@@ -19,13 +19,14 @@
 </template>
 
 <script>
+import axios from 'axios'
+import {mapActions} from 'vuex'
+
 import Login from '@/components/Login.vue'
 import Status from '@/components/Status.vue'
 
 import playlists from '@/playlists'
 
-import axios from 'axios'
-import {mapActions} from 'vuex'
 
 const TOKEN_RENEW_TIMEOUT = 10 * 60 * 1000   // ten minutes
 

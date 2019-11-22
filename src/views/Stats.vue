@@ -71,7 +71,7 @@ export default {
     '$route'() {
       this.load()
     }
-  }
+  },
 }
 </script>
 
