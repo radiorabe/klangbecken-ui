@@ -39,8 +39,18 @@ export default {
       return this.adjacentMonth(-1)
     }
   },
-  created() {
-    this.load()
+  async created() {
+    this.loading = true
+    try {
+      let response = await axios.get(`/data/log/${this.month}.csv`)
+      let parsed = parse(response.data, {header: true})
+      this.headers = parsed.meta.fields
+      this.data = parsed.data
+      this.available = true
+    } catch (err) {
+      this.available = false
+    }
+    this.loading = false
   },
   beforeDestroy () {
   },
@@ -50,19 +60,6 @@ export default {
       let newMonth = (month + 11 + direction) % 12 + 1
       let newYear = year + Math.floor((month + 11 + direction) / 12) - 1
       return `${newYear}-${newMonth}`
-    },
-    async load() {
-      this.loading = true
-      try {
-        let response = await axios.get(`/data/log/${this.month}.csv`)
-        let parsed = parse(response.data, {header: true})
-        this.headers = parsed.meta.fields
-        this.data = parsed.data
-        this.available = true
-      } catch (err) {
-        this.available = false
-      }
-      this.loading = false
     },
   },
 }
