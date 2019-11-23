@@ -29,7 +29,7 @@ export default {
       index.delete(state.data[itemId])
       Vue.delete(state.data, itemId)
     },
-    modifyItem: (state, itemId, modifications) => {
+    updateItem: (state, {itemId, modifications}) => {
       for (let key in modifications) {
         Vue.set(state.data[itemId], key, modifications[key])
       }

@@ -25,6 +25,8 @@
         <button @click="preview(value)">preview</button>
         <button @click="remove(value)" :disabled="!isLoggedIn">delete</button>
         <button @click="playNext(value)" :disabled="!isLoggedIn">play next</button>
+        <button v-if="value.weight !== 0" @click="update(value, {weight: 0})" :disabled="!isLoggedIn">disable</button>
+        <button v-else @click="update(value, {weight: 1})" :disabled="!isLoggedIn">enable</button>
       </li>
     </ul>
   </div>
@@ -32,7 +34,7 @@
 
 <script>
 import axios from 'axios'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 
 import playlists from '@/playlists'
 import index from '@/search'
@@ -84,6 +86,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['updateItem']),
     async upload(ev) {
       this.progress = 0
       let files = ev.srcElement.files
@@ -126,6 +129,16 @@ export default {
         await axios.post(`/api/playnext/`, {file:`${entry.playlist}/${entry.id}${entry.ext}`})
       } catch (err) {
         //fail
+      }
+    },
+    async update(entry, modifications) {
+      try {
+        let path = `/api/${entry.playlist}/${entry.id}${entry.ext}`
+        let resp = await axios.put(path, modifications)
+        this.updateItem({itemId: entry.id, modifications})
+        console.log(resp)
+      } catch (err) {
+        // Notification
       }
     }
   }
