@@ -39,7 +39,7 @@ export default {
       let token = state.token
       if (token) {
         try {
-          let response = await axios.post('/api/renew_token/', {token})
+          let response = await axios.post('/api/auth/renew/', {token})
           commit('setToken', response.data.token)
         } catch (err) {
           commit('removeToken')
@@ -51,7 +51,7 @@ export default {
       body.append('login', credentials.username || '')
       body.append('password', credentials.password || '')
 
-      let response = await axios.post('/api/login/', body)
+      let response = await axios.post('/api/auth/login/', body)
 
       let new_token = response.data.token
       commit('setToken', new_token)
