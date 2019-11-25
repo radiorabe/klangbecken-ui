@@ -27,8 +27,8 @@
           <button @click="preview(value)">preview</button>
           <button @click="remove(value)" :disabled="!isLoggedIn">delete</button>
           <button @click="playNext(value)" :disabled="!isLoggedIn">play next</button>
-          <button v-if="value.weight !== 0" @click="update(value, {weight: 0})" :disabled="!isLoggedIn">disable</button>
-          <button v-else @click="update(value, {weight: 1})" :disabled="!isLoggedIn">enable</button>
+          <button v-if="value.weight" @click="disable(value)" :disabled="!isLoggedIn">disable</button>
+          <button v-else @click="enable(value)" :disabled="!isLoggedIn">enable</button>
           <button @click="editing = value.id" :disabled="!isLoggedIn">edit</button>
         </template>
       </li>
@@ -38,7 +38,7 @@
 
 <script>
 import axios from 'axios'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 import Edit from '@/components/Edit.vue'
 
@@ -94,6 +94,8 @@ export default {
   },
   methods: {
     ...mapMutations(['addItem', 'updateItem', 'removeItem']),
+    ...mapActions(['updateMetadata']),
+
     async upload(ev) {
       this.progress = 0
       let files = ev.srcElement.files
@@ -138,14 +140,11 @@ export default {
         //fail
       }
     },
-    async update(entry, modifications) {
-      try {
-        let path = `/api/${entry.playlist}/${entry.id}${entry.ext}`
-        await axios.put(path, modifications)
-        this.updateItem({itemId: entry.id, modifications})
-      } catch (err) {
-        // Notification
-      }
+    async enable(entry) {
+      await this.updateMetadata({ entry, modifications: {weight: 1} })
+    },
+    async disable(entry) {
+      await this.updateMetadata({ entry, modifications: {weight: 0} })
     },
   },
   components: {
