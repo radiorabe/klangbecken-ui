@@ -18,7 +18,7 @@
       <option value="+artist">Artist (aufsteigend)</option>
     </select>
 
-    Search: <input v-model="search" placeholder="Search ..."><button @click="search = ''">x</button>
+    Search: <input v-model="search" placeholder="Search ..." @keyup.esc="search = ''"><button @click="search = ''">x</button>
     <ul>
       <li v-for="value in playlistData" :key="value.id">
         <Edit v-if="editing === value.id" :editing="value" @done="editing = ''"/>
