@@ -72,27 +72,30 @@ export default {
       return playlists[this.playlist].description
     },
     playlistData() {
-      if (this.search.trim() !== '') {
-        return index.search(this.search, {where: {'playlist': this.playlist}})
+      if (this.search) {
+        return this.playlistSearchData
+      } else {
+        return this.playlistSortedData
       }
-      let obj = this.data
-      let result =  Object.keys(obj)
-          .filter( key => obj[key].playlist === this.playlist )
-          .reduce((res, key) => res.concat([obj[key]]), [])
+    },
+    playlistSearchData() {
+      return index.search(this.search, {where: {'playlist': this.playlist}})
+    },
+    playlistSortedData() {
+      let playlist = Object.values(this.data)
+        .filter((entry) => entry.playlist === this.playlist)
       let key = this.order_key.substr(1)
       let direction = this.order_key[0] === '+' ? 1 : -1
-      result.sort((left, right) => {
-        left = left[key]
-        right = right[key]
-        if (left < right) {
+      playlist.sort((left, right) => {
+        if (left[key] < right[key]) {
           return -1 * direction
-        } else if (right < left) {
+        } else if (right[key] < left[key]) {
           return 1 * direction
         } else {
           return 0
         }
       })
-      return result
+      return playlist
     }
   },
   methods: {
