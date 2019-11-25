@@ -26,7 +26,7 @@ export default {
       }
     },
     removeItem: (state, itemId) => {
-      index.delete(state.data[itemId])
+      index.remove(state.data[itemId])
       Vue.delete(state.data, itemId)
     },
     updateItem: (state, {itemId, modifications}) => {
