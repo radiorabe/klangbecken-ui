@@ -2,8 +2,8 @@
   <div>
     <span v-if="isLoggedIn">{{username}} <button @click="logout">Logout</button></span>
     <span v-else>
-      username: <input type="text" placeholder="Username" v-model="loginform.username"><br/>
-      password: <input type="password" placeholder="Password" v-model="loginform.password">
+      username: <input type="text" ref="username" placeholder="Username" v-model="loginform.username"><br/>
+      password: <input type="password" placeholder="Password" v-model="loginform.password" @keyup.enter="tryLogin">
       <button @click="tryLogin">Login</button>
     </span>
   </div>
@@ -18,6 +18,9 @@ export default {
     return {
       loginform: {},
     }
+  },
+  mounted() {
+    this.$refs.username.focus()
   },
   computed: {
     ...mapGetters(['isLoggedIn', 'username'])
