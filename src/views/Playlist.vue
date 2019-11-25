@@ -86,7 +86,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['updateItem']),
+    ...mapMutations(['addItem', 'updateItem', 'removeItem']),
     async upload(ev) {
       this.progress = 0
       let files = ev.srcElement.files
@@ -100,7 +100,7 @@ export default {
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' }}
           )
-          this.$store.commit('addItem', response.data)
+          this.addItem(response.data)
         } catch (err) {
           // nothing
         }
@@ -119,7 +119,7 @@ export default {
     async remove(entry) {
       try {
         await axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`)
-        this.$store.commit('removeItem', entry.id)
+        this.removeItem(entry.id)
       } catch (err) {
         //Nothing
       }
