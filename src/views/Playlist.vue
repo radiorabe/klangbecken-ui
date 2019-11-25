@@ -21,13 +21,7 @@
     Search: <input v-model="search" placeholder="Search ..."><button @click="search = ''">x</button>
     <ul>
       <li v-for="value in playlistData" :key="value.id">
-        <template v-if="editing.id === value.id">
-          <input v-model="editing.artist" @keyup.enter="save" @keyup.esc="cancel" placeholder="Artist">
-          <input v-model="editing.title" @keyup.enter="save" @keyup.esc="cancel" placeholder="Title">
-          {{value.original_filename}}
-          <button @click="save(value, editing)">Save</button>
-          <button @click="cancel">Cancel</button>
-        </template>
+        <Edit v-if="editing === value.id" :editing="value" @done="editing = ''"/>
         <template v-else>
           {{value.artist}} - {{value.title}} - {{value.original_filename}}
           <button @click="preview(value)">preview</button>
@@ -35,7 +29,7 @@
           <button @click="playNext(value)" :disabled="!isLoggedIn">play next</button>
           <button v-if="value.weight !== 0" @click="update(value, {weight: 0})" :disabled="!isLoggedIn">disable</button>
           <button v-else @click="update(value, {weight: 1})" :disabled="!isLoggedIn">enable</button>
-          <button @click="edit(value)" :disabled="!isLoggedIn">edit</button>
+          <button @click="editing = value.id" :disabled="!isLoggedIn">edit</button>
         </template>
       </li>
     </ul>
@@ -45,6 +39,8 @@
 <script>
 import axios from 'axios'
 import {mapGetters, mapMutations} from 'vuex'
+
+import Edit from '@/components/Edit.vue'
 
 import playlists from '@/playlists'
 import index from '@/search'
@@ -58,7 +54,7 @@ export default {
       preview_path: '',
       preview_name: '',
       search: '',
-      editing: {},
+      editing: '',
     }
   },
   props: ['playlist'],
@@ -151,19 +147,9 @@ export default {
         // Notification
       }
     },
-    edit(entry) {
-      this.editing = {...entry}
-    },
-    async save() {
-      await this.update(
-        this.data[this.editing.id],
-        {artist: this.editing.artist, title: this.editing.title}
-      )
-      this.editing = {}
-    },
-    cancel() {
-      this.editing = {}
-    },
-  }
+  },
+  components: {
+    Edit,
+  },
 }
 </script>

@@ -46,5 +46,14 @@ export default {
         // Show notification!
       }
     },
+    async updateMetadata({commit}, {entry, modifications}) {
+      try {
+        let path = `/api/${entry.playlist}/${entry.id}${entry.ext}`
+        await axios.put(path, modifications)
+        commit('updateItem', {itemId: entry.id, modifications})
+      } catch (err) {
+        // Notification
+      }
+    },
   },
 }
