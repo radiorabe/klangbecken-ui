@@ -21,12 +21,22 @@
     Search: <input v-model="search" placeholder="Search ..."><button @click="search = ''">x</button>
     <ul>
       <li v-for="value in playlistData" :key="value.id">
-        {{value.artist}} - {{value.title}} - {{value.original_filename}}
-        <button @click="preview(value)">preview</button>
-        <button @click="remove(value)" :disabled="!isLoggedIn">delete</button>
-        <button @click="playNext(value)" :disabled="!isLoggedIn">play next</button>
-        <button v-if="value.weight !== 0" @click="update(value, {weight: 0})" :disabled="!isLoggedIn">disable</button>
-        <button v-else @click="update(value, {weight: 1})" :disabled="!isLoggedIn">enable</button>
+        <template v-if="editing.id === value.id">
+          <input v-model="editing.artist" @keyup.enter="save" @keyup.esc="cancel" placeholder="Artist">
+          <input v-model="editing.title" @keyup.enter="save" @keyup.esc="cancel" placeholder="Title">
+          {{value.original_filename}}
+          <button @click="save(value, editing)">Save</button>
+          <button @click="cancel">Cancel</button>
+        </template>
+        <template v-else>
+          {{value.artist}} - {{value.title}} - {{value.original_filename}}
+          <button @click="preview(value)">preview</button>
+          <button @click="remove(value)" :disabled="!isLoggedIn">delete</button>
+          <button @click="playNext(value)" :disabled="!isLoggedIn">play next</button>
+          <button v-if="value.weight !== 0" @click="update(value, {weight: 0})" :disabled="!isLoggedIn">disable</button>
+          <button v-else @click="update(value, {weight: 1})" :disabled="!isLoggedIn">enable</button>
+          <button @click="edit(value)" :disabled="!isLoggedIn">edit</button>
+        </template>
       </li>
     </ul>
   </div>
@@ -48,6 +58,7 @@ export default {
       preview_path: '',
       preview_name: '',
       search: '',
+      editing: {},
     }
   },
   props: ['playlist'],
@@ -139,7 +150,20 @@ export default {
       } catch (err) {
         // Notification
       }
-    }
+    },
+    edit(entry) {
+      this.editing = {...entry}
+    },
+    async save() {
+      await this.update(
+        this.data[this.editing.id],
+        {artist: this.editing.artist, title: this.editing.title}
+      )
+      this.editing = {}
+    },
+    cancel() {
+      this.editing = {}
+    },
   }
 }
 </script>
