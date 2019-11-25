@@ -134,9 +134,8 @@ export default {
     async update(entry, modifications) {
       try {
         let path = `/api/${entry.playlist}/${entry.id}${entry.ext}`
-        let resp = await axios.put(path, modifications)
+        await axios.put(path, modifications)
         this.updateItem({itemId: entry.id, modifications})
-        console.log(resp)
       } catch (err) {
         // Notification
       }
