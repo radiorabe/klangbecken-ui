@@ -3,8 +3,8 @@
     <h2>Playlist - {{playlistName}}</h2>
 
     <h3>Upload</h3>
-    <input type="file" multiple accept="audio/*" @change="upload" :disabled="!isLoggedIn">
-    <progress :value="progress"></progress>
+    <input type="file" ref="fileupload" multiple accept="audio/*" @change="upload" :disabled="!isLoggedIn">
+    <progress :value="progress"></progress> {{ processing ? 'processing ...' : ''}}
 
     <h3>Preview Player</h3>
     <div>
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import 'core-js/proposals/promise-all-settled'
+
 import axios from 'axios'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 
@@ -55,6 +57,7 @@ export default {
       preview_name: '',
       search: '',
       editing: '',
+      processing: false,
     }
   },
   props: ['playlist'],
@@ -99,23 +102,54 @@ export default {
     async upload(ev) {
       this.progress = 0
       let files = ev.srcElement.files
-      // FIXME: async for loop
-      for (let file of files) {
-        let formData = new FormData();
-        formData.append('file', file);
-        try {
-          let response = await axios.post(
+
+      let chunks = [...files].reduce((chunks, file) => {
+        if (chunks[chunks.length - 1].length === 4) {
+          chunks.push([])
+        }
+        chunks[chunks.length - 1].push(file)
+        return chunks
+      }, [[]])
+
+      let progress = 0
+      for (let chunk of chunks) {
+        let promises = []
+        let progresses = chunk.map(() => 0)
+        for (const [index, file] of chunk.entries()) {
+          let formData = new FormData();
+          formData.append('file', file);
+          let promise = axios.post(
             `/api/${this.playlist}/`,
             formData,
-            { headers: { 'Content-Type': 'multipart/form-data' }}
+            {
+              headers: { 'Content-Type': 'multipart/form-data' },
+              onUploadProgress: (progressEvent) => {
+                progresses[index] = progressEvent.loaded / progressEvent.total;
+                let current_progress = progresses.reduce((a, b) => a + b)
+                this.progress = (progress + current_progress) / files.length
+                if (current_progress === progresses.length) {
+                  this.processing = true
+                }
+              }
+            }
           )
-          this.addItem(response.data)
-        } catch (err) {
-          // nothing
+          promises.push(promise)
         }
-        this.progress += 1 / files.length
+
+        let results = await Promise.allSettled(promises)
+        this.processing = false
+        for (let result in results) {
+          if (result.status === 'fullfilled') {
+            this.addItem(result.value.data)
+          } else {
+            // Notify
+          }
+        }
+
+        progress += promises.length
       }
-      this.progress = 1
+      this.progress = 0
+      this.$refs.fileupload.value = ''
     },
     preview(entry) {
       this.preview_path = `/data/${entry.playlist}/${entry.id}${entry.ext}`
