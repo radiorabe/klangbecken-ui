@@ -1,20 +1,35 @@
 <template>
-  <div>
-    <h2>Play-Statistik für {{month}}</h2>
-    <router-link :to="{name: 'stats', params: {month: prevMonth}}">&lt; {{prevMonth}}</router-link> |
-    <router-link :to="{name: 'stats', params: {month: nextMonth}}">{{nextMonth}} &gt;</router-link>
+  <v-card>
+    <v-card-title>
+      Play-Statistik für {{monthName}} {{year}}
+      <v-spacer></v-spacer>
 
+      <v-btn class="" text small color="secondary" :to="{name: 'stats', params: {month: prevMonth}}">
+        <v-icon left>mdi-chevron-left</v-icon> Vorheriger Monat
+      </v-btn>
+      <v-btn class="" text small color="secondary" :to="{name: 'stats', params: {month: nextMonth}}">
+        Nächster Monat <v-icon left>mdi-chevron-right</v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn small class="ma-2"  color="secondary" :href="`/data/log/${this.month}.csv`">
+        <v-icon left>mdi-download</v-icon> CSV-Datei herunterladen
+      </v-btn>
+    </v-card-title>
     <v-data-table
       :headers="headers"
       :items="dataPrepared"
       :items-per-page="50"
       class="elevation-2"
+      dense
+      must-sort
+      sort-by="last_play"
+      sort-desc
       :footer-props="{'items-per-page-options':  [50, 100, 200, -1]}"
       :loading="loading"
-      :loading-text="loadingText"
-      dense
-     ></v-data-table>
-  </div>
+      loading-text="Daten werden geladen. Bitte warten ..."
+     >
+    </v-data-table>
+  </v-card>
 </template>
 
 <script>
@@ -41,24 +56,40 @@ export default {
           value: 'original_filename',
         },
         {
+          text: 'Playliste',
+          value: 'playlist',
+          width: 100,
+        },
+        {
           text: 'Zeitstempel',
           align: 'left',
           value: 'last_play',
+          width: 170,
         },
         {
-          text: 'Anzahl Plays',
-          align: 'left',
+          text: 'Plays',
           value: 'play_count',
+          width: 80,
         },
 
       ],
-      data: {},
-      loadingText: 'Daten werden geladen. Bitte warten ...',
+      search: '',
+      data: [],
       loading: true
     }
   },
   props: ['month'],
   computed:{
+    months() {
+      return 'Januar Februar März April Mai Juni Juli August September Oktober November Dezember'.split(' ')
+    },
+    monthName() {
+      let month = this.month.split('-').map((s) => parseInt(s, 10))[1]
+      return this.months[month - 1]
+    },
+    year() {
+      return this.month.split('-').map((s) => parseInt(s, 10))[0]
+    },
     nextMonth() {
       return this.adjacentMonth(1)
     },
@@ -74,8 +105,10 @@ export default {
         for (let {value} of this.headers) {
           obj[value] = entry[value]
         }
-        if (entry.id !== '')
+        if (entry.id !== '') {
+          obj.last_play = obj.last_play.replace('T', ' ').substr(0,19)
           lst.push(obj)
+        }
       }
       return lst
     }
@@ -86,10 +119,10 @@ export default {
       let response = await axios.get(`/data/log/${this.month}.csv`)
       let parsed = parse(response.data, {header: true})
       this.data = parsed.data
-      this.loading = false
     } catch (err) {
-      this.loadingText = "Keine Daten verfügbar."
+      // Not available
     }
+    this.loading = false
   },
   beforeDestroy () {
   },
