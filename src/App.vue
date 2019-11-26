@@ -66,6 +66,7 @@
       </v-container>
     </v-content>
     <Login :show="showLogin" @done="showLogin = false"/>
+    <Notifications/>
   </v-app>
 </template>
 
@@ -74,6 +75,7 @@ import axios from 'axios'
 import {mapActions, mapGetters} from 'vuex'
 
 import Login from '@/components/Login.vue'
+import Notifications from '@/components/Notifications.vue'
 import Status from '@/components/Status.vue'
 
 import playlists from '@/playlists'
@@ -119,6 +121,7 @@ export default {
   },
   components: {
     Login,
+    Notifications,
     Status,
   },
 }

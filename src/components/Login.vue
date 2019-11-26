@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   name: 'Login',
@@ -63,8 +63,9 @@ export default {
         await this.login(this.loginform)
         this.loginform = {}
         this.$emit('done')
+        this.success('User wurde eingeloggt')
       } catch (err) {
-        // Notification
+        this.error('Einloggen ist fehlgeschlagen. ')
         this.loginform.password = ''
       }
     },
@@ -76,6 +77,7 @@ export default {
       this.$emit('done')
     },
     ...mapActions(['login', 'logout']),
+    ...mapMutations(['success', 'error']),
   },
 }
 </script>
