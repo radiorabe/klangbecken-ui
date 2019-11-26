@@ -1,19 +1,19 @@
 <template>
   <div>
-    <h2>Statistics for {{month}}</h2>
+    <h2>Play-Statistik für {{month}}</h2>
     <router-link :to="{name: 'stats', params: {month: prevMonth}}">&lt; {{prevMonth}}</router-link> |
     <router-link :to="{name: 'stats', params: {month: nextMonth}}">{{nextMonth}} &gt;</router-link>
 
-    <div v-if="loading">Loading</div>
-    <table border="1" v-else-if="available">
-      <tr>
-        <th v-for="title in headers" :key="title">{{title}}</th>
-      </tr>
-      <tr v-for="entry in data" :key="entry.id">
-        <td v-for="key in headers" :key="key">{{entry[key] || ''}}</td>
-      </tr>
-    </table>
-    <div v-else>No data available</div>
+    <v-data-table
+      :headers="headers"
+      :items="dataPrepared"
+      :items-per-page="50"
+      class="elevation-2"
+      :footer-props="{'items-per-page-options':  [50, 100, 200, -1]}"
+      :loading="loading"
+      :loading-text="loadingText"
+      dense
+     ></v-data-table>
   </div>
 </template>
 
@@ -24,9 +24,36 @@ import {parse} from 'papaparse'
 export default {
   data() {
     return {
-      headers: [],
+      headers: [
+        {
+          text: 'Artist',
+          align: 'left',
+          value: 'artist',
+        },
+        {
+          text: 'Titel',
+          align: 'left',
+          value: 'title',
+        },
+        {
+          text: 'Dateiname',
+          align: 'left',
+          value: 'original_filename',
+        },
+        {
+          text: 'Zeitstempel',
+          align: 'left',
+          value: 'last_play',
+        },
+        {
+          text: 'Anzahl Plays',
+          align: 'left',
+          value: 'play_count',
+        },
+
+      ],
       data: {},
-      available: true,
+      loadingText: 'Daten werden geladen. Bitte warten ...',
       loading: true
     }
   },
@@ -37,6 +64,20 @@ export default {
     },
     prevMonth() {
       return this.adjacentMonth(-1)
+    },
+    dataPrepared() {
+      if (this.loading)
+        return []
+      let lst = []
+      for (let entry of this.data) {
+        let obj = {}
+        for (let {value} of this.headers) {
+          obj[value] = entry[value]
+        }
+        if (entry.id !== '')
+          lst.push(obj)
+      }
+      return lst
     }
   },
   async created() {
@@ -44,13 +85,11 @@ export default {
     try {
       let response = await axios.get(`/data/log/${this.month}.csv`)
       let parsed = parse(response.data, {header: true})
-      this.headers = parsed.meta.fields
       this.data = parsed.data
-      this.available = true
+      this.loading = false
     } catch (err) {
-      this.available = false
+      this.loadingText = "Keine Daten verfügbar."
     }
-    this.loading = false
   },
   beforeDestroy () {
   },
