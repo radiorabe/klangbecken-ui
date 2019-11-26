@@ -1,6 +1,6 @@
 export default {
   music: {
-    name: 'Music',
+    name: 'Musik',
     description: '',
   },
   jingles: {
