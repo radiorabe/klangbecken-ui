@@ -30,7 +30,7 @@ export default {
 
     save() {
       this.updateMetadata({
-        entry: editing,
+        entry: this.editing,
         modifications: {artist: this.artist, title: this.title}
       })
       this.$emit('done')
