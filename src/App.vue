@@ -1,26 +1,79 @@
 <template>
-  <div id="app">
-    <h1>Klangbecken</h1>
-    <h3>Login</h3>
-    <Login/>
+  <v-app :style="{background: $vuetify.theme.themes.light.background}">
+    <v-app-bar
+      fixed
+      app
+      dense
+      elevate-on-scroll
+      extension-height="40"
+      height="40"
+    >
+      <v-toolbar-title><span class="title">Klangbecken</span></v-toolbar-title>
+      <v-spacer></v-spacer>
+      <Status/>
 
-    <h3>Status Klangbecken</h3>
-    <Status/>
+      <v-toolbar-items>
+      <v-menu bottom left offset-y v-if="isLoggedIn">
+        <template v-slot:activator="{ on }">
+          <v-btn small text tile v-on="on">
+            <v-icon>mdi-account</v-icon>
+            {{username}}
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-if="isLoggedIn" @click="logout">
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-btn v-else small text tile v-on:click="showLogin = true">
+        <v-icon>mdi-account</v-icon>
+        Login
+      </v-btn>
+      </v-toolbar-items>
 
-    <h3>Navigation</h3>
-    <div id="nav">
-      <template v-for="(entry, playlist) in playlists" >
-        <router-link :to="`/${playlist}`" :key="playlist">{{entry.name}}</router-link> |
+      <template v-slot:img>
+        <v-img
+          height="80"
+          :src="require('./assets/logo_rabe_sw.svg')"
+          contain
+          position="center left"
+        ></v-img>
       </template>
-      <router-link to="/stats">Stats</router-link>
-    </div>
-    <router-view :key="$route.fullPath"/>
-  </div>
+
+      <template v-slot:extension>
+        <v-tabs
+          background-color="transparent"
+          color="secondary"
+          fixed-tabs
+        >
+          <v-tab
+            v-for="(entry, playlist) in playlists"
+            :key="playlist"
+            :to="`/${playlist}`"
+          >
+            {{entry.name}}
+            <!-- <router-link :to="`/${playlist}`" >{{entry.name}}</router-link> -->
+          </v-tab>
+          <v-tab to="/stats">
+            Statistiken
+            <!-- <router-link to="/stats">Stats</router-link> -->
+          </v-tab>
+        </v-tabs>
+      </template>
+    </v-app-bar>
+    <v-content>
+      <v-container fluid>
+        <router-view :key="$route.fullPath"/>
+      </v-container>
+    </v-content>
+    <Login :show="showLogin" @done="showLogin = false"/>
+  </v-app>
 </template>
 
 <script>
 import axios from 'axios'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 import Login from '@/components/Login.vue'
 import Status from '@/components/Status.vue'
@@ -42,7 +95,11 @@ export default {
       data: {},
       tokenInterval: null,
       playlists: pls,
+      showLogin: false,
     }
+  },
+  computed:{
+    ...mapGetters(['isLoggedIn', 'username'])
   },
   async created() {
     this.loadData()
@@ -70,7 +127,7 @@ export default {
 </script>
 
 <style>
-html {
-  font-family: 'sans-serif'
+.title {
+  padding-left: 40px;
 }
 </style>
