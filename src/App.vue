@@ -4,7 +4,7 @@
       fixed
       app
       dense
-      elevate-on-scroll
+      elevation="1"
       extension-height="40"
       height="40"
     >
@@ -53,11 +53,9 @@
             :to="`/${playlist}`"
           >
             {{entry.name}}
-            <!-- <router-link :to="`/${playlist}`" >{{entry.name}}</router-link> -->
           </v-tab>
           <v-tab to="/stats">
-            Statistiken
-            <!-- <router-link to="/stats">Stats</router-link> -->
+            Statistik
           </v-tab>
         </v-tabs>
       </template>

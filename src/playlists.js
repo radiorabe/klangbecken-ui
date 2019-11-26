@@ -6,5 +6,5 @@ export default {
   jingles: {
     name: 'Jingles',
     description: '',
-  }
+  },
 }
