@@ -79,6 +79,14 @@ export default {
     ...mapActions(['login', 'logout']),
     ...mapMutations(['success', 'error']),
   },
+  watch: {
+    async show(show) {
+      if (show) {
+        await this.$nextTick()
+        this.$refs.username.focus()
+      }
+    }
+  },
 }
 </script>
 
