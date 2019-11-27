@@ -35,7 +35,7 @@
       <template v-slot:img>
         <v-img
           height="80"
-          :src="require('./assets/logo_rabe_sw.svg')"
+          :src="require('./assets/logo.svg')"
           contain
           position="center left"
         ></v-img>
