@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      Play-Statistik für {{monthName}} {{year}}
+      Statistik für {{monthName}} {{year}}
       <v-spacer></v-spacer>
 
       <v-btn class="" text small color="secondary" :to="{name: 'stats', params: {month: prevMonth}}">

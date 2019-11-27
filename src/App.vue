@@ -27,7 +27,6 @@
         </v-list>
       </v-menu>
       <v-btn v-else small text tile v-on:click="showLogin = true">
-        <v-icon>mdi-account</v-icon>
         Login
       </v-btn>
       </v-toolbar-items>
