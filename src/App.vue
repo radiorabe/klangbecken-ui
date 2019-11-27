@@ -72,7 +72,7 @@
 
 <script>
 import axios from 'axios'
-import {mapActions, mapGetters} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 import Login from '@/components/Login.vue'
 import Notifications from '@/components/Notifications.vue'
@@ -108,7 +108,7 @@ export default {
     axios.interceptors.response.use((resp) => resp, async (err) => {
       if (err.response.status === 401) {
         this.logout()
-        // FIXME: notification
+        this.error('User wurde ausgelogt')
       }
       throw err
     })
@@ -118,6 +118,7 @@ export default {
   },
   methods: {
     ...mapActions(['loadData', 'renewToken', 'logout']),
+    ...mapMutations(['error']),
   },
   components: {
     Login,
