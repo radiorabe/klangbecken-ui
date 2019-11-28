@@ -7,11 +7,13 @@ import index from '@/search'
 export default {
   state: {
     data: {},
+    loading: true,
   },
 
   getters: {
     hasData: (state) => !!state.data,
     data: (state) => state.data,
+    loadingData: (state) => state.loading,
   },
 
   mutations: {
@@ -35,16 +37,20 @@ export default {
       }
       index.update(state.data[itemId])
     },
+    startLoading: (state) => state.loading = true,
+    endLoading: (state) => state.loading = false,
   },
 
   actions: {
     async loadData({commit}) {
+      commit('startLoading')
       try {
         let response = await axios.get('/data/index.json')
         commit('setData', response.data)
       } catch (err) {
         // Show notification!
       }
+      commit('endLoading')
     },
     async updateMetadata({commit}, {entry, modifications}) {
       try {

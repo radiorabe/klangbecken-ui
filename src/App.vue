@@ -57,11 +57,18 @@
             Statistik
           </v-tab>
         </v-tabs>
+        <v-progress-linear
+        :active="loadingData"
+        :indeterminate="loadingData"
+        absolute
+        bottom
+        color="primary"
+      ></v-progress-linear>
       </template>
     </v-app-bar>
     <v-content>
       <v-container fluid>
-        <router-view :key="$route.fullPath"/>
+        <router-view :key="$route.fullPath" v-if="!loadingData"/>
       </v-container>
     </v-content>
     <Login :show="showLogin" @done="showLogin = false"/>
@@ -98,7 +105,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(['isLoggedIn', 'username'])
+    ...mapGetters(['isLoggedIn', 'username', 'loadingData'])
   },
   async created() {
     this.loadData()
