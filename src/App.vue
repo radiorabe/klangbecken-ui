@@ -72,6 +72,7 @@
       </v-container>
     </v-content>
     <Login :show="showLogin" @done="showLogin = false"/>
+    <PreviewPlayer/>
     <Notifications/>
   </v-app>
 </template>
@@ -82,6 +83,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 import Login from '@/components/Login.vue'
 import Notifications from '@/components/Notifications.vue'
+import PreviewPlayer from '@/components/PreviewPlayer.vue'
 import Status from '@/components/Status.vue'
 
 import playlists from '@/playlists'
@@ -130,6 +132,7 @@ export default {
   components: {
     Login,
     Notifications,
+    PreviewPlayer,
     Status,
   },
 }

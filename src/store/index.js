@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import auth from './auth'
 import data from './data'
 import notify from './notify'
+import preview from './preview'
 
 Vue.use(Vuex)
 
@@ -17,5 +18,6 @@ export default new Vuex.Store({
     auth,
     data,
     notify,
+    preview,
   }
 })

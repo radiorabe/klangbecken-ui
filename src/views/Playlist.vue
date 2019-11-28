@@ -24,7 +24,7 @@
         <Edit v-if="editing === value.id" :editing="value" @done="editing = ''"/>
         <template v-else>
           {{value.artist}} - {{value.title}} - {{value.original_filename}}
-          <button @click="preview(value)">preview</button>
+          <button @click="setPreview(value)">preview</button>
           <button @click="remove(value)" :disabled="!isLoggedIn">delete</button>
           <button @click="playNext(value)" :disabled="!isLoggedIn">play next</button>
           <button v-if="value.weight" @click="disable(value)" :disabled="!isLoggedIn">disable</button>
@@ -99,7 +99,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['addItem', 'updateItem', 'removeItem']),
+    ...mapMutations(['addItem', 'updateItem', 'removeItem', 'setPreview']),
     ...mapActions(['updateMetadata']),
 
     async upload(ev) {
