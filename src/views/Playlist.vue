@@ -66,6 +66,7 @@
       </li>
     </ul>
     <Edit :editing="editing" @done="editing = ''"/>
+    <RemoveConfirmation :removing="removing" @done="removing = ''"/>
     </v-card-text>
   </v-card>
 </template>
@@ -77,6 +78,7 @@ import axios from 'axios'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 import Edit from '@/components/Edit.vue'
+import RemoveConfirmation from '@/components/RemoveConfirmation.vue'
 import FileUpload from '@/components/FileUpload.vue'
 
 
@@ -94,6 +96,7 @@ export default {
       ],
       search: '',
       editing: '',
+      removing: '',
     }
   },
   props: ['playlist'],
@@ -137,16 +140,11 @@ export default {
   methods: {
     ...mapMutations(['addItem', 'updateItem', 'removeItem', 'setPreview']),
     ...mapActions(['updateMetadata']),
-    async remove(entry) {
-      try {
-        await axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`)
-        this.removeItem(entry.id)
-      } catch (err) {
-        //Nothing
-      }
     edit(entry) {
       this.editing = entry.id
     },
+    remove(entry) {
+      this.removing = entry.id
     },
     async playNext(entry) {
       try {
@@ -164,6 +162,7 @@ export default {
   },
   components: {
     Edit,
+    RemoveConfirmation,
     FileUpload,
   },
 }
