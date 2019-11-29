@@ -65,6 +65,7 @@
         </template>
       </li>
     </ul>
+    <Edit :editing="editing" @done="editing = ''"/>
     </v-card-text>
   </v-card>
 </template>
@@ -143,6 +144,9 @@ export default {
       } catch (err) {
         //Nothing
       }
+    edit(entry) {
+      this.editing = entry.id
+    },
     },
     async playNext(entry) {
       try {
