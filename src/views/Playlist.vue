@@ -1,24 +1,56 @@
 <template>
-  <div>
-    <h2>Playlist - {{playlistName}}</h2>
-
-    <h3>Upload</h3>
-    <input type="file" ref="fileupload" multiple accept="audio/*" @change="upload" :disabled="!isLoggedIn">
-    <progress :value="progress"></progress> {{ processing ? 'processing ...' : ''}}
-
-    <h3>Preview Player</h3>
-    <div>
-      <audio :src="preview_path" v-on:ended="ended" autoplay controls></audio>
-      {{preview_name}}
-    </div>
-    <h3>Playlist</h3>
-    Order by
-    <select v-model="order_key">
-      <option value="-import_timestamp" selected="selected">Import-Datum (neuste zuerst)</option>
-      <option value="+artist">Artist (aufsteigend)</option>
-    </select>
-
-    Search: <input v-model="search" placeholder="Search ..." @keyup.esc="search = ''"><button @click="search = ''">x</button>
+  <v-card>
+    <v-container fluid class="ma-0 pa-0">
+      <v-row no-gutters justify="start">
+        <v-col lg="3" md="4" sm="5" col="6">
+          <v-card-title>
+            {{playlistName}} Playliste
+          </v-card-title>
+          <v-card-subtitle v-html="playlistDescription"></v-card-subtitle>
+        </v-col>
+        <v-col lg="9" md="8" sm="7" col="6" >
+          <FileUpload
+            :playlist="playlist"
+            class="pa-4"
+          />
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-card-text class="py-0">
+      <v-container fluid class="ma-0 pa-0">
+        <v-row no-gutters justify="start">
+          <v-col lg="3" md="4" sm="5" col="12">
+            <v-select
+              v-model="orderKey"
+              :items="orderItems"
+              item-text="text"
+              item-value="value"
+              label="orderItems"
+              single-line
+              color="primary"
+              prepend-inner-icon="mdi-sort"
+              class="mr-2 pa-0"
+              :full-width="false"
+              hide-details
+            ></v-select>
+          </v-col>
+          <v-col col="12" lg="4" md="5" sm="6">
+            <v-text-field
+              v-model="search"
+              prepend-inner-icon="mdi-magnify"
+              label="Suchen"
+              single-line
+              hide-details
+              clearable
+              @keyup.esc="search = ''"
+              color="primary"
+              class="ml-2 pa-0"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card-text>
+    <v-card-text>
     <ul>
       <li v-for="value in playlistData" :key="value.id">
         <Edit v-if="editing === value.id" :editing="value" @done="editing = ''"/>
@@ -33,7 +65,8 @@
         </template>
       </li>
     </ul>
-  </div>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -43,6 +76,8 @@ import axios from 'axios'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 import Edit from '@/components/Edit.vue'
+import FileUpload from '@/components/FileUpload.vue'
+
 
 import playlists from '@/playlists'
 import index from '@/search'
@@ -51,13 +86,13 @@ export default {
   name: 'playlist',
   data() {
     return {
-      order_key: '-import_timestamp',
-      progress: 0,
-      preview_path: '',
-      preview_name: '',
+      orderKey: '-import_timestamp',
+      orderItems: [
+        {text: 'Import-Datum (Neuste zuerst)', value: '-import_timestamp'},
+        {text: 'Artist (Aufsteigend)', value: '+artist'},
+      ],
       search: '',
       editing: '',
-      processing: false,
     }
   },
   props: ['playlist'],
@@ -84,8 +119,8 @@ export default {
     playlistSortedData() {
       let playlist = Object.values(this.data)
         .filter((entry) => entry.playlist === this.playlist)
-      let key = this.order_key.substr(1)
-      let direction = this.order_key[0] === '+' ? 1 : -1
+      let key = this.orderKey.substr(1)
+      let direction = this.orderKey[0] === '+' ? 1 : -1
       playlist.sort((left, right) => {
         if (left[key] < right[key]) {
           return -1 * direction
@@ -101,67 +136,6 @@ export default {
   methods: {
     ...mapMutations(['addItem', 'updateItem', 'removeItem', 'setPreview']),
     ...mapActions(['updateMetadata']),
-
-    async upload(ev) {
-      this.progress = 0
-      let files = ev.srcElement.files
-
-      let chunks = [...files].reduce((chunks, file) => {
-        if (chunks[chunks.length - 1].length === 4) {
-          chunks.push([])
-        }
-        chunks[chunks.length - 1].push(file)
-        return chunks
-      }, [[]])
-
-      let progress = 0
-      for (let chunk of chunks) {
-        let promises = []
-        let progresses = chunk.map(() => 0)
-        for (const [index, file] of chunk.entries()) {
-          let formData = new FormData();
-          formData.append('file', file);
-          let promise = axios.post(
-            `/api/${this.playlist}/`,
-            formData,
-            {
-              headers: { 'Content-Type': 'multipart/form-data' },
-              onUploadProgress: (progressEvent) => {
-                progresses[index] = progressEvent.loaded / progressEvent.total;
-                let current_progress = progresses.reduce((a, b) => a + b)
-                this.progress = (progress + current_progress) / files.length
-                if (current_progress === progresses.length) {
-                  this.processing = true
-                }
-              }
-            }
-          )
-          promises.push(promise)
-        }
-
-        let results = await Promise.allSettled(promises)
-        this.processing = false
-        for (let result in results) {
-          if (result.status === 'fullfilled') {
-            this.addItem(result.value.data)
-          } else {
-            // Notify
-          }
-        }
-
-        progress += promises.length
-      }
-      this.progress = 0
-      this.$refs.fileupload.value = ''
-    },
-    preview(entry) {
-      this.preview_path = `/data/${entry.playlist}/${entry.id}${entry.ext}`
-      this.preview_name = `${entry.artist} - ${entry.title}`
-    },
-    ended() {
-      this.preview_path = ''
-      this.preview_name = ''
-    },
     async remove(entry) {
       try {
         await axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`)
@@ -186,6 +160,7 @@ export default {
   },
   components: {
     Edit,
+    FileUpload,
   },
 }
 </script>
