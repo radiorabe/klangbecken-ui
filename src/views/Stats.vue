@@ -4,22 +4,21 @@
       Statistik für {{monthName}} {{year}}
       <v-spacer></v-spacer>
 
-      <v-btn class="" text small color="secondary" :to="{name: 'stats', params: {month: prevMonth}}">
-        <v-icon left>mdi-chevron-left</v-icon> Vorheriger Monat
+      <v-btn text small color="secondary" :to="{name: 'stats', params: {month: prevMonth}}">
+        <v-icon small>mdi-chevron-left</v-icon> Vorheriger Monat
       </v-btn>
-      <v-btn class="" text small color="secondary" :to="{name: 'stats', params: {month: nextMonth}}">
-        Nächster Monat <v-icon left>mdi-chevron-right</v-icon>
+      <v-btn text small color="secondary" :to="{name: 'stats', params: {month: nextMonth}}">
+        Nächster Monat <v-icon small>mdi-chevron-right</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn small class="ma-2"  color="secondary" :href="`/data/log/${this.month}.csv`">
-        <v-icon left>mdi-download</v-icon> CSV-Datei herunterladen
+      <v-btn small color="secondary" :href="`/data/log/${this.month}.csv`">
+        <v-icon small left>mdi-download</v-icon> CSV-Datei herunterladen
       </v-btn>
     </v-card-title>
     <v-data-table
       :headers="headers"
       :items="dataPrepared"
       :items-per-page="50"
-      class="elevation-2"
       dense
       must-sort
       sort-by="last_play"
