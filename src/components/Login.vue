@@ -35,8 +35,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="secondary" text @click="cancel">Abbrechen</v-btn>
-          <v-btn color="secondary" text @click="tryLogin">Login</v-btn>
+          <v-btn color="secondary" outlined @click="cancel">Abbrechen</v-btn>
+          <v-btn color="secondary" @click="tryLogin">Login</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
