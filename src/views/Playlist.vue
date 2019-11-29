@@ -51,20 +51,89 @@
       </v-container>
     </v-card-text>
     <v-card-text>
-    <ul>
-      <li v-for="value in playlistData" :key="value.id">
-        <Edit v-if="editing === value.id" :editing="value" @done="editing = ''"/>
-        <template v-else>
-          {{value.artist}} - {{value.title}} - {{value.original_filename}}
-          <button @click="setPreview(value)">preview</button>
-          <button @click="remove(value)" :disabled="!isLoggedIn">delete</button>
-          <button @click="playNext(value)" :disabled="!isLoggedIn">play next</button>
-          <button v-if="value.weight" @click="disable(value)" :disabled="!isLoggedIn">disable</button>
-          <button v-else @click="enable(value)" :disabled="!isLoggedIn">enable</button>
-          <button @click="editing = value.id" :disabled="!isLoggedIn">edit</button>
-        </template>
-      </li>
-    </ul>
+      <v-divider/>
+
+      <template v-for="(entry, index) in playlistData">
+      <v-list-item
+        :key="entry.id"
+        two-line
+        dense
+
+      >
+        <v-list-item-content class="py-1">
+          <v-container fluid class="ma-0 pa-0">
+            <v-row no-gutters justify="start">
+              <v-col xl="10" lg="8" md="8" sm="6">
+                <v-list-item-title>
+                  {{entry.title || '&lt;Unbekanter Titel>'}}
+                  <span class="caption">({{toMinutes(entry.length)}})</span>
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  von <span class="font-italic">{{entry.artist || '&lt;Unbekannter Artist>'}}</span>
+                  &nbsp;<span class="caption">({{entry.play_count}} Plays)</span>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle class="font-weight-light caption">
+                  {{entry.original_filename}}
+                </v-list-item-subtitle>
+                </v-col>
+                <v-col xl="1" lg="2" md="2" sm="3" class="px-2 py-1">
+                  <v-btn
+                    x-small
+                    outlined
+                    block
+                    color="secondary"
+                    @click="setPreview(entry)"
+                    class="ma-0 mb-2"
+                  >
+                    <v-icon x-small left>mdi-play</v-icon>
+                    Vorhören
+                  </v-btn>
+                  <v-btn
+                    x-small
+                    outlined
+                    block
+                    color="secondary"
+                    @click="edit(entry)"
+                    :disabled="!isLoggedIn"
+                    class="ma-0 text-truncate"
+                  >
+                    <v-icon x-small left>mdi-playlist-edit</v-icon>
+                    Tags bearbeiten
+                  </v-btn>
+                </v-col>
+                <v-col xl="1" lg="2" md="2" sm="3" class="px-2 py-1">
+                  <v-btn
+                    x-small
+                    outlined
+                    block
+                    color="secondary"
+                    @click="playNext(entry)"
+                    :disabled="!isLoggedIn"
+                    class="ma-0 mb-2"
+                  >
+                    <v-icon x-small left>mdi-upload</v-icon>
+                    Play next
+                  </v-btn>
+                  <v-btn
+                    x-small
+                    outlined
+                    block
+                    color="error"
+                    @click="remove(entry)"
+                    :disabled="!isLoggedIn"
+                    class="ma-0"
+                  >
+                    <v-icon x-small left>mdi-delete</v-icon>
+                    Löschen
+                  </v-btn>
+
+                </v-col>
+              </v-row>
+          </v-container>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider :key="index"/>
+    </template>
     <Edit :editing="editing" @done="editing = ''"/>
     <RemoveConfirmation :removing="removing" @done="removing = ''"/>
     </v-card-text>
@@ -140,6 +209,12 @@ export default {
   methods: {
     ...mapMutations(['addItem', 'updateItem', 'removeItem', 'setPreview']),
     ...mapActions(['updateMetadata']),
+    toMinutes(seconds) {
+      let minutes = Math.round(seconds / 60)
+      seconds = `00${Math.round(seconds % 60)}`
+      seconds = seconds.substr(seconds.length - 2)
+      return `${minutes}:${seconds}`
+    },
     edit(entry) {
       this.editing = entry.id
     },
