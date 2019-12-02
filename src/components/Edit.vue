@@ -3,34 +3,64 @@
     <v-dialog
       :value="show"
       persistent
-      max-width="300"
+      max-width="500"
       @keydown.esc="cancel"
       @click:outside="cancel"
     >
-      <v-card>
-        <v-card-title class="headline">Login</v-card-title>
-        <v-card-text>
-          <v-col cols="12">
-            <v-text-field
-              label="Artist"
-              ref="artist"
-              required
-              autofocus
-              v-model="artist"
-              @keyup.enter="next"
-              @keyup.esc="cancel"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12">
-            <v-text-field
-              label="Title"
-              ref="title"
-              required
-              v-model="title"
-              @keyup.enter="save"
-              @keyup.esc="cancel"
-            ></v-text-field>
-          </v-col>
+      <v-card v-if="show">
+        <v-card-title class="headline">Bearbeiten</v-card-title>
+        <v-card-text class="pl-8 pr-12">
+          <v-text-field
+            label="Artist"
+            ref="artist"
+            required
+            autofocus
+            v-model="artist"
+            @keyup.enter="tabbyEnter"
+            @keyup.esc="cancel"
+            hint="Mit [Tab] oder [Enter] zum nächsten Feld springen"
+          ></v-text-field>
+          <v-text-field
+            label="Title"
+            ref="title"
+            required
+            v-model="title"
+            @keyup.enter="save"
+            @keyup.esc="cancel"
+            hint="Mit [Enter] abspeichern, mit [Esc] abbrechen"
+          ></v-text-field>
+          <p class="mt-2 mb-0">
+            <span class="subtitle-1">Dateiname:</span>
+            <span class="ml-2">{{item.original_filename}}</span>
+          </p>
+          <p class="mb-0">
+            <span class="subtitle-1">Anzahl Plays:</span>
+            <span class="ml-2">{{item.play_count}}</span>
+          </p>
+          <p class="mb-0">
+            <span class="subtitle-1">Zuletzt gespielt:</span>
+            <span class="ml-2">{{item.last_play.replace('T', ' ').substr(0,19) || 'noch nie'}}</span>
+          </p>
+          <p class="mb-0">
+            <span class="subtitle-1">Länge:</span>
+            <span class="ml-2">{{toMinutes(item.length)}} ({{Math.round(100 * item.length) / 100}} s)</span>
+          </p>
+          <p class="mb-0">
+            <span class="subtitle-1">Cue in:</span>
+            <span class="ml-2">{{Math.round(100 * item.cue_in) / 100}} s</span>
+          </p>
+          <p class="mb-0">
+            <span class="subtitle-1">Cue out:</span>
+            <span class="ml-2">{{Math.round(100 * item.cue_out) / 100}} s</span>
+          </p>
+          <p class="mb-0">
+            <span class="subtitle-1">Normalisierung:</span>
+            <span class="ml-2">{{item.track_gain}}</span>
+          </p>
+          <p class="mb-0">
+            <span class="subtitle-1">Importdatum:</span>
+            <span class="ml-2">{{item.import_timestamp.replace('T', ' ').substr(0,19)}}</span>
+          </p>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -67,12 +97,19 @@ export default {
     ...mapGetters(['data']),
     show() {
       return this.editing !== '' && this.data[this.editing]
-    }
+    },
+    item() {
+      if (this.show) {
+        return this.data[this.editing]
+      } else {
+        return {}
+      }
+    },
   },
 
   methods: {
     ...mapActions(['updateMetadata']),
-    next() {
+    tabbyEnter() {
       this.$refs.title.focus()
     },
     save() {
@@ -85,6 +122,12 @@ export default {
 
     cancel() {
       this.$emit('done')
+    },
+    toMinutes(seconds) {
+      let minutes = Math.round(seconds / 60)
+      seconds = `00${Math.round(seconds % 60)}`
+      seconds = seconds.substr(seconds.length - 2)
+      return `${minutes}:${seconds}`
     },
   },
   watch: {
