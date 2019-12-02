@@ -4,7 +4,7 @@ export default FlexSearch.create({
   profile: 'score',
   doc: {
     id: 'id',
-    field: ['artist', 'album', 'title', 'original_filename'],
+    field: ['artist', 'title', 'original_filename'],
     tag: 'playlist',
   },
 })
