@@ -78,13 +78,6 @@
       </v-card>
     </v-dialog>
   </v-row>
-  <!-- <div>
-    <input ref="artist" v-model="artist" @keyup.enter="save" @keyup.esc="cancel" placeholder="Artist">
-    <input v-model="title" @keyup.enter="save" @keyup.esc="cancel" placeholder="Title">
-    {{editing.original_filename}}
-    <button @click="save">Save</button>
-    <button @click="cancel">Cancel</button>
-  </div> -->
 </template>
 
 <script>
