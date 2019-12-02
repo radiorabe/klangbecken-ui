@@ -48,6 +48,7 @@ export default {
         let response = await axios.get('/data/index.json')
         commit('setData', response.data)
       } catch (err) {
+        commit('error', 'Daten konnten nicht geladen werden.')
         // Show notification!
       }
       commit('endLoading')
@@ -57,7 +58,9 @@ export default {
         let path = `/api/${entry.playlist}/${entry.id}${entry.ext}`
         await axios.put(path, modifications)
         commit('updateItem', {itemId: entry.id, modifications})
+        commit('success', 'Metadaten wurden gespeichert.')
       } catch (err) {
+        commit('error', 'Metadaten konnten nicht gespeichert werden.')
         // Notification
       }
     },

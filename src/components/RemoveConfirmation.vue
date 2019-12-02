@@ -3,7 +3,7 @@
     <v-dialog
       :value="show"
       persistent
-      max-width="300"
+      max-width="400"
       @keydown.esc="cancel"
       @keydown.enter="remove"
       @click:outside="cancel"
@@ -11,8 +11,11 @@
       <v-card>
         <v-card-title class="headline">Eintrag löschen?</v-card-title>
         <v-card-text>
-          Die Datei <code>{{entry.original_filename}}</code>
-          ({{entry.artist || '&lt;Unbekannter Artist>'}} - {{entry.title || '&lt;Unbekannter Titel>'}})
+          Die Datei
+          <ul class="my-1">
+            <li class="font-italic">{{entry.original_filename}}</li>
+            <li>{{entry.artist || '&lt;Unbekannter Artist>'}} &mdash; {{entry.title || '&lt;Unbekannter Titel>'}}</li>
+          </ul>
           wirklich löschen?
         </v-card-text>
         <v-card-actions>
@@ -49,7 +52,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['removeItem']),
+    ...mapMutations(['removeItem', 'success', 'error']),
     next() {
       this.$refs.title.focus()
     },
@@ -58,8 +61,9 @@ export default {
       try {
         await axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`)
         this.removeItem(entry.id)
+        this.success('Datei wurde gelöscht.')
       } catch (err) {
-        //Nothing
+        this.error('Datei konnte nicht gelöscht werden.')
       }
       this.$emit('done')
     },

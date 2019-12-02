@@ -5,7 +5,7 @@
       :key="index"
       v-model="entry.show"
       :color="entry.color"
-      :timeout="8000"
+      :timeout="6000"
       bottom
       left
       :style="{bottom: (8 + index * 64) + 'px'}"

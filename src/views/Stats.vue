@@ -57,7 +57,7 @@ export default {
         {
           text: 'Playliste',
           value: 'playlist',
-          width: 100,
+          width: 110,
         },
         {
           text: 'Zeitstempel',
@@ -68,7 +68,7 @@ export default {
         {
           text: 'Plays',
           value: 'play_count',
-          width: 80,
+          width: 90,
         },
 
       ],

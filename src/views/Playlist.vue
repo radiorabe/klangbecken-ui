@@ -149,7 +149,6 @@ import Edit from '@/components/Edit.vue'
 import RemoveConfirmation from '@/components/RemoveConfirmation.vue'
 import FileUpload from '@/components/FileUpload.vue'
 
-
 import playlists from '@/playlists'
 import index from '@/search'
 
@@ -159,7 +158,7 @@ export default {
     return {
       orderKey: '-import_timestamp',
       orderItems: [
-        {text: 'Import-Datum (Neuste zuerst)', value: '-import_timestamp'},
+        {text: 'Importdatum (Neuste zuerst)', value: '-import_timestamp'},
         {text: 'Artist (Aufsteigend)', value: '+artist'},
       ],
       search: '',
@@ -207,7 +206,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['addItem', 'updateItem', 'removeItem', 'setPreview']),
+    ...mapMutations(['addItem', 'updateItem', 'removeItem', 'setPreview', 'success', 'error']),
     ...mapActions(['updateMetadata']),
     edit(entry) {
       this.editing = entry.id
@@ -218,8 +217,9 @@ export default {
     async playNext(entry) {
       try {
         await axios.post(`/api/playnext/`, {file:`${entry.playlist}/${entry.id}${entry.ext}`})
+        this.success(`Der Song '${entry.title}' wird als nächstes im Klangbecken abgespielt.`)
       } catch (err) {
-        //fail
+        this.error('Der Song konnte nicht in die Queue aufgenommen werden.')
       }
     },
     niceDate(timestamp) {

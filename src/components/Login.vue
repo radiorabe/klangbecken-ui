@@ -63,9 +63,9 @@ export default {
         await this.login(this.loginform)
         this.loginform = {}
         this.$emit('done')
-        this.success('User wurde eingeloggt')
+        this.success('Login erfolgreich.')
       } catch (err) {
-        this.error('Einloggen ist fehlgeschlagen. ')
+        this.error('Login ist fehlgeschlagen. ')
         this.loginform.password = ''
       }
     },
