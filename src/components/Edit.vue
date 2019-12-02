@@ -63,6 +63,10 @@
             <span class="subtitle-1">Importdatum:</span>
             <span class="ml-2">{{item.import_timestamp.replace('T', ' ').substr(0,19)}}</span>
           </p>
+          <p class="mb-0">
+            <span class="subtitle-1">ID:</span>
+            <span class="ml-2">{{item.id}}</span>
+          </p>
         </v-card-text>
         <v-card-actions>
           <v-btn color="secondary" text :disabled="isFirst()" @click="prev" title="[Ctrl]-[Links]"><v-icon>mdi-chevron-left</v-icon></v-btn>
