@@ -6,6 +6,8 @@
       max-width="500"
       @keydown.esc="cancel"
       @click:outside="cancel"
+      @keydown.ctrl.left="prev"
+      @keydown.ctrl.right="next"
     >
       <v-card v-if="show">
         <v-card-title class="headline">Bearbeiten</v-card-title>
@@ -63,9 +65,11 @@
           </p>
         </v-card-text>
         <v-card-actions>
+          <v-btn color="secondary" text :disabled="isFirst()" @click="prev" title="[Ctrl]-[Links]"><v-icon>mdi-chevron-left</v-icon></v-btn>
+          <v-btn color="secondary" text :disabled="isLast()" @click="next" title="[Ctrl]-[Rechts]"><v-icon>mdi-chevron-right</v-icon></v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="secondary" text @click="cancel">Abbrechen</v-btn>
-          <v-btn color="secondary" @click="save">Speichern</v-btn>
+          <v-btn color="secondary" text @click="cancel" title="[Esc]">Abbrechen</v-btn>
+          <v-btn color="secondary" @click="save(); cancel()">Speichern</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -80,14 +84,14 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   name: 'Edit',
   data() {
     return {
-      artist: '',//this.data[this.editing].artist,
-      title: '', //this.editing.title,
+      artist: '',
+      title: '',
     }
   },
   props: [
@@ -108,6 +112,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['error']),
     ...mapActions(['updateMetadata']),
     tabbyEnter() {
       this.$refs.title.focus()
@@ -117,11 +122,37 @@ export default {
         entry: this.data[this.editing],
         modifications: {artist: this.artist, title: this.title}
       })
-      this.$emit('done')
     },
-
     cancel() {
       this.$emit('done')
+    },
+    isFirst() {
+      let idx = this.$parent.playlistData.findIndex((item) => item === this.item)
+      return idx === 0
+    },
+    isLast() {
+      let idx = this.$parent.playlistData.findIndex((item) => item === this.item)
+      return idx === this.$parent.playlistData.length - 1
+    },
+    prev() {
+      if (this.artist !== this.item.artist || this.title !== this.item.title) {
+        this.error('Nicht gespeicherte Änderungen.')
+      } else {
+        let idx = this.$parent.playlistData.findIndex((item) => item === this.item)
+        if (idx > 0) {
+          this.$parent.editing = this.$parent.playlistData[idx - 1].id
+        }
+      }
+    },
+    next() {
+      if (this.artist !== this.item.artist || this.title !== this.item.title) {
+        this.error('Nicht gespeicherte Änderungen.')
+      } else {
+        let idx = this.$parent.playlistData.findIndex((item) => item === this.item)
+        if (idx < this.$parent.playlistData.length - 1) {
+          this.$parent.editing = this.$parent.playlistData[idx + 1].id
+        }
+      }
     },
     toMinutes(seconds) {
       let minutes = Math.round(seconds / 60)
