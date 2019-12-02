@@ -17,7 +17,7 @@
         <template v-slot:activator="{ on }">
           <v-btn small text tile v-on="on">
             <v-icon>mdi-account</v-icon>
-            {{username}}
+            {{username.split('@')[0]}}
           </v-btn>
         </template>
         <v-list>
