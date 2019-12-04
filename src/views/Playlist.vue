@@ -161,6 +161,7 @@ export default {
       orderItems: [
         {text: 'Importdatum (Neuste zuerst)', value: '-import_timestamp'},
         {text: 'Artist (Aufsteigend)', value: '+artist'},
+        {text: 'Anzahl Plays (Absteigend)', value: '-play_count'},
       ],
       search: '',
       editing: '',
