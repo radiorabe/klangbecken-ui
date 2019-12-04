@@ -80,14 +80,6 @@ export default {
 </script>
 
 <style>
-.current {
-  margin-left: 15px;
-  margin-right: 15px;
-  overflow: hidden;
-}
-div.truncate {
-  display: inline-block;
-}
 .disable-events {
   pointer-events: none
 }
