@@ -114,7 +114,8 @@ export default {
     this.renewToken()
     this.tokenInterval = setInterval(this.renewToken, TOKEN_RENEW_TIMEOUT)
     axios.interceptors.response.use((resp) => resp, async (err) => {
-      if (err.response.status === 401 &&
+      if (err.response &&
+          err.response.status === 401 &&
           err.response.config.url !== '/api/auth/login/') {
         this.logout()
         this.error('User wurde ausgelogt')

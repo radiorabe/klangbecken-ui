@@ -89,6 +89,7 @@
               color="secondary"
               @click="setPreview(entry)"
               class="ma-0"
+              :disabled="!online"
             >
               <v-icon x-small left>mdi-play</v-icon>
               Vorhören
@@ -99,7 +100,7 @@
               small
               color="secondary"
               @click="edit(entry)"
-              :disabled="!isLoggedIn"
+              :disabled="!isLoggedIn || !online"
               class="ma-0"
             >
               <v-icon x-small left>mdi-pencil</v-icon>
@@ -111,7 +112,7 @@
               small
               color="secondary"
               @click="playNext(entry)"
-              :disabled="!isLoggedIn"
+              :disabled="!isLoggedIn || !online"
               class="ma-0"
             >
               <v-icon x-small left>mdi-upload</v-icon>
@@ -122,7 +123,7 @@
               small
               color="error"
               @click="remove(entry)"
-              :disabled="!isLoggedIn"
+              :disabled="!isLoggedIn || !online"
               class="ma-0"
             >
               <v-icon x-small left>mdi-delete</v-icon>
@@ -171,7 +172,7 @@ export default {
   created() {
   },
   computed: {
-    ...mapGetters(['isLoggedIn', 'data']),
+    ...mapGetters(['isLoggedIn', 'data', 'online']),
     playlistName() {
       return playlists[this.playlist].name
     },

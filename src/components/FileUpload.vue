@@ -2,7 +2,7 @@
   <div class="d-flex">
     <v-btn
       color="secondary"
-      :disabled="!isLoggedIn" @
+      :disabled="!isLoggedIn || !online"
       @click="showUploadDialog"
       class="ml-auto"
       small
@@ -59,7 +59,7 @@ export default {
     'playlist'
   ],
   computed: {
-  ...mapGetters(['isLoggedIn', 'data']),
+  ...mapGetters(['isLoggedIn', 'data', 'online']),
   },
   methods: {
     ...mapMutations(['error', 'success', 'addItem']),

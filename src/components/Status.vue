@@ -1,17 +1,24 @@
 <template>
   <v-toolbar-items class="disable-events">
-    <v-btn small tile depressed :ripple="false" text>
-      {{currentSong}}
+    <template v-if="online">
+      <v-btn small tile depressed :ripple="false" text>
+        {{currentSong}}
+      </v-btn>
+      <v-btn small depressed tile :disabled="!onair" :ripple="false" text >
+        O{{onair ? 'n' : 'ff'}} Air:
+        <v-icon color="green">mdi-access-point</v-icon>
+      </v-btn>
+    </template>
+    <v-btn v-else small depressed tile disabled :ripple="false" text >
+      Offline: Netzwerkverbindung überprüfen
     </v-btn>
-    <v-btn small depressed tile :disabled="!onair" :ripple="false" text >
-      O{{onair ? 'n' : 'ff'}} Air:
-      <v-icon color="green">mdi-access-point</v-icon>
-    </v-btn>
+
   </v-toolbar-items>
 </template>
 
 <script>
 import axios from 'axios'
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
   name: 'Status',
@@ -19,10 +26,17 @@ export default {
   created() {
     let poll = async () => {
       try {
-        let response = await axios.get('/data/log/current.json')
+        let response = await axios.get('/data/log/current.json', { headers: {
+          'If-Modified-Since': 'invalid',
+        }})
         this.current = response.data
+        if (!this.online) {
+          this.setOnline()
+        }
       } catch (err) {
-        // Nothing yet
+        if (err.message === 'Network Error') {
+          this.setOffline()
+        }
       }
     }
 
@@ -41,6 +55,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['online']),
     onair() {
       return !!this.current
     },
@@ -57,6 +72,9 @@ export default {
         return ''
       }
     }
+  },
+  methods: {
+    ...mapMutations(['setOnline', 'setOffline']),
   },
 }
 </script>

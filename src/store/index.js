@@ -10,9 +10,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   strict: true,
-  state: {},
-  getters: {},
-  mutations: {},
+  state: {
+    online: true
+  },
+  getters: {
+    online: (state) => state.online
+  },
+  mutations: {
+    setOnline: (state) => state.online = true,
+    setOffline: (state) => state.online = false,
+  },
   actions: {},
   modules: {
     auth,

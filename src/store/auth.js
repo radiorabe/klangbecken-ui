@@ -37,7 +37,7 @@ export default {
   actions: {
     async renewToken({commit, state}) {
       let token = state.token
-      if (token) {
+      if (token && state.online) {
         try {
           let response = await axios.post('/api/auth/renew/', {token})
           commit('setToken', response.data.token)

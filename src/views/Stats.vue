@@ -11,7 +11,7 @@
         Nächster Monat <v-icon small>mdi-chevron-right</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn small color="secondary" :href="`/data/log/${this.month}.csv`">
+      <v-btn small color="secondary" :href="`/data/log/${this.month}.csv`" :disabled="!online">
         <v-icon small left>mdi-download</v-icon> CSV-Datei herunterladen
       </v-btn>
     </v-card-title>
@@ -26,6 +26,7 @@
       :footer-props="{'items-per-page-options':  [50, 100, 200, -1]}"
       :loading="loading"
       loading-text="Daten werden geladen. Bitte warten ..."
+      :no-data-text="online ? 'Keine Daten vorhanden' : 'Offline'"
      >
     </v-data-table>
   </v-card>
@@ -34,6 +35,7 @@
 <script>
 import axios from 'axios'
 import {parse} from 'papaparse'
+import {mapGetters} from 'vuex'
 
 export default {
   data() {
@@ -79,6 +81,7 @@ export default {
   },
   props: ['month'],
   computed:{
+    ...mapGetters(['online']),
     months() {
       return 'Januar Februar März April Mai Juni Juli August September Oktober November Dezember'.split(' ')
     },
