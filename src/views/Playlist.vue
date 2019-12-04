@@ -1,7 +1,7 @@
 <template>
 <div>
   <Edit :editing="editing" @done="editing = ''"/>
-  <RemoveConfirmation :removing="removing" @done="removing = ''"/>
+  <RemoveConfirmation :removing="removing" @done="afterRemoving"/>
 
   <v-card>
     <v-container fluid class="ma-0 pa-0">
@@ -229,6 +229,13 @@ export default {
       let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 
       return date.toLocaleDateString('de-CH', options)
+    },
+    async afterRemoving() {
+      let length = this.search.length
+      this.search = this.search + ' '
+      this.removing = ''
+      await this.$nextTick()
+      this.search = this.search.substr(0, length)
     },
   },
   components: {
