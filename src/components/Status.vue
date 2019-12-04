@@ -20,27 +20,35 @@
 import axios from 'axios'
 import {mapGetters, mapMutations} from 'vuex'
 
+const POLL_TIMEOUT = 3000
+
 export default {
   name: 'Status',
 
   created() {
     let poll = async () => {
       try {
-        let response = await axios.get('/data/log/current.json', { headers: {
-          'If-Modified-Since': 'invalid',
-        }})
+        let response = await axios.get('/data/log/current.json', {
+          timeout: POLL_TIMEOUT - 100,
+          headers: {
+            'If-Modified-Since': 'invalid',
+          }
+        })
         this.current = response.data
         if (!this.online) {
           this.setOnline()
         }
       } catch (err) {
-        if (err.message === 'Network Error') {
+        if (err.message === 'Network Error' ||
+            err.message.startsWith('timeout')) {
           this.setOffline()
+        } else {
+          this.error(`Klangbecken-Status konnte nicht abgefrag werden: ${err.message}`)
         }
       }
     }
 
-    this.polling = setInterval(poll, 3000)
+    this.polling = setInterval(poll, POLL_TIMEOUT)
     poll()
   },
 
@@ -74,7 +82,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setOnline', 'setOffline']),
+    ...mapMutations(['setOnline', 'setOffline', 'error']),
   },
 }
 </script>
