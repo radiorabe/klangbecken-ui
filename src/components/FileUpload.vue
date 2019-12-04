@@ -17,10 +17,8 @@
           <v-progress-linear
             class="mt-0"
             color="primary"
-            :value="progress"
+            :value="processing ? 0 : progress"
             :indeterminate="processing"
-            :stream="processing"
-            :buffer-value="100"
             rounded
             height="10"
           ></v-progress-linear>
