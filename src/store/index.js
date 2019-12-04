@@ -11,7 +11,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: true,
   state: {
-    online: true
+    online: true,
   },
   getters: {
     online: (state) => state.online
