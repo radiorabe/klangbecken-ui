@@ -4,6 +4,7 @@
       v-model="show"
       persistent
       max-width="300"
+      :disabled="checking"
       @keydown.esc="cancel"
       @click:outside="cancel"
     >
@@ -18,6 +19,7 @@
                 required
                 autofocus
                 v-model="loginform.username"
+                :disabled="checking"
                 @keyup.enter="next"
                 @keyup.esc="cancel"
               ></v-text-field>
@@ -29,6 +31,7 @@
                 required
                 ref="password"
                 v-model="loginform.password"
+                :disabled="checking"
                 @keyup.esc="cancel"
               ></v-text-field>
             </v-col>
@@ -36,8 +39,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="secondary" outlined @click="cancel">Abbrechen</v-btn>
-          <v-btn color="secondary" type="submit" form="login-form">Login</v-btn>
+          <v-btn color="secondary" outlined @click="cancel" :disabled="checking">Abbrechen</v-btn>
+          <v-btn color="secondary" type="submit" form="login-form" :disabled="checking">Login</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -52,6 +55,7 @@ export default {
   data() {
     return {
       loginform: {},
+      checking: false,
     }
   },
   props: ['show'],
@@ -61,6 +65,7 @@ export default {
   methods: {
     async tryLogin() {
       try {
+        this.checking = true
         await this.login(this.loginform)
         this.loginform = {}
         this.$emit('done')
@@ -69,6 +74,7 @@ export default {
         this.error('Login ist fehlgeschlagen. ')
         this.loginform.password = ''
       }
+      this.checking = false
     },
     next() {
       this.$refs.password.focus()
