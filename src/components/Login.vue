@@ -10,33 +10,34 @@
       <v-card>
         <v-card-title class="headline">Login</v-card-title>
         <v-card-text>
-          <v-col cols="12">
-            <v-text-field
-              label="Benutzername"
-              ref="username"
-              required
-              autofocus
-              v-model="loginform.username"
-              @keyup.enter="next"
-              @keyup.esc="cancel"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12">
-            <v-text-field
-              label="Passwort"
-              type="password"
-              required
-              ref="password"
-              v-model="loginform.password"
-              @keyup.enter="tryLogin"
-              @keyup.esc="cancel"
-            ></v-text-field>
-          </v-col>
+          <form @submit.prevent="tryLogin" id="login-form">
+            <v-col cols="12">
+              <v-text-field
+                label="Benutzername"
+                ref="username"
+                required
+                autofocus
+                v-model="loginform.username"
+                @keyup.enter="next"
+                @keyup.esc="cancel"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                label="Passwort"
+                type="password"
+                required
+                ref="password"
+                v-model="loginform.password"
+                @keyup.esc="cancel"
+              ></v-text-field>
+            </v-col>
+          </form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="secondary" outlined @click="cancel">Abbrechen</v-btn>
-          <v-btn color="secondary" @click="tryLogin">Login</v-btn>
+          <v-btn color="secondary" type="submit" form="login-form">Login</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
