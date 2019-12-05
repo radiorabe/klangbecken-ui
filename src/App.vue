@@ -22,7 +22,7 @@
         </template>
         <v-list>
           <v-list-item v-if="isLoggedIn" @click="logout">
-            <v-list-item-title>Logout</v-list-item-title>
+            <v-list-item-title><v-icon left small>mdi-logout</v-icon>Logout</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
