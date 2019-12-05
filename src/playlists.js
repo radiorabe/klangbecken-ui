@@ -1,11 +1,11 @@
 export default {
   music: {
     name: 'Musik',
-    description: 'Hauptplayliste für das Klangbecken',
+    description: 'Hauptplayliste für das Klangbecken.',
   },
   classics: {
     name: 'Classics',
-    description: 'Die Evergreens aus zwei Dekaden RaBe',
+    description: 'Die Evergreens aus zwei Dekaden RaBe. Zirka jeder fünfte Titel wird aus dieser Playliste gespielt.',
   },
   jingles: {
     name: 'Jingles',
