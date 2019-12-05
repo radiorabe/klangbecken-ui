@@ -1,7 +1,7 @@
 <template>
 <div>
   <Edit :editing="editing" @done="editing = ''"/>
-  <RemoveConfirmation :removing="removing" @done="afterRemoving"/>
+  <RemoveConfirmation :removing="removing" @done="afterRemoving" v-if="removing"/>
 
   <v-card>
     <v-container fluid class="ma-0 pa-0">
