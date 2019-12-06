@@ -10,5 +10,6 @@ export default {
   jingles: {
     name: 'Jingles',
     description: 'Jingles werden viermal pro Stunde in die Playliste eingefügt. Jeweils zur Minute 05, 20, 35 und 50.',
+    weights: true,
   },
 }

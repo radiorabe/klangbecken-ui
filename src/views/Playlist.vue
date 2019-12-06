@@ -72,11 +72,14 @@
           @mouseleave="hovering = ''"
           style="flex"
           class="d-flex justify-space-between align-center flex-nowrap"
+          :class="{disabled: entry.weight === 0}"
         >
           <p class="mb-0 mr-1 text-truncate flex-grow-1" :class="{'flex-shrink-0': (hovering !== entry.id)}">
             <span class="subtitle-1 font-weight-bold">{{entry.title || '&lt;Unbekanter Titel>'}}</span> von
             <span class="subtitle-1 font-italic">{{entry.artist || '&lt;Unbekanter Artist>'}}</span>
-            <span class="ml-2 caption">({{entry.play_count}} Plays)</span>
+            <span class="ml-2 caption">
+              (Plays: {{entry.play_count}}<span v-if="playlistShowWeights"> &mdash; Priorität: {{entry.weight}}</span>)
+            </span>
           </p>
           <p class="mb-0 flex-grow-0 text-right caption text-truncate" v-if="hovering !== entry.id">
             <span>Dateiname: {{entry.original_filename}}</span> <br>
@@ -158,11 +161,6 @@ export default {
   data() {
     return {
       orderKey: '-import_timestamp',
-      orderItems: [
-        {text: 'Importdatum (Neuste zuerst)', value: '-import_timestamp'},
-        {text: 'Artist (Aufsteigend)', value: '+artist'},
-        {text: 'Anzahl Plays (Absteigend)', value: '-play_count'},
-      ],
       search: '',
       editing: '',
       removing: '',
@@ -179,6 +177,20 @@ export default {
     },
     playlistDescription() {
       return playlists[this.playlist].description
+    },
+    playlistShowWeights() {
+      return playlists[this.playlist].weights
+    },
+    orderItems() {
+      let orders = [
+        {text: 'Importdatum (Neuste zuerst)', value: '-import_timestamp'},
+        {text: 'Artist (Aufsteigend)', value: '+artist'},
+        {text: 'Anzahl Plays (Absteigend)', value: '-play_count'},
+      ]
+      if (this.playlistShowWeights) {
+        orders.push({text: 'Priorität (Absteigend)', value: '-weight'})
+      }
+      return orders
     },
     playlistData() {
       if (this.search) {
@@ -256,5 +268,8 @@ export default {
   position: absolute;
   top:0;
   width:100%;
+}
+.disabled {
+  color: gray !important;
 }
 </style>

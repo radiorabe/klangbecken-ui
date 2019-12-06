@@ -31,6 +31,19 @@
             @keyup.esc="cancel"
             hint="Mit [Enter] abspeichern, mit [Esc] abbrechen"
           ></v-text-field>
+          <v-slider
+            v-if="showWeight"
+            label="Priorität"
+            v-model="weight"
+            min="0"
+            max="9"
+            :hint="weight ? '' : 'Abgestellt'"
+            :color="weight ? 'primary': 'error'"
+            :thumb-size="20"
+            thumb-label="always"
+            class="mt-5"
+          >
+          </v-slider>
           <p class="mt-2 mb-0">
             <span class="subtitle-1">Dateiname:</span>
             <span class="ml-2">{{item.original_filename}}</span>
@@ -89,6 +102,7 @@ export default {
     return {
       artist: '',
       title: '',
+      weight: 0,
     }
   },
   props: [
@@ -106,6 +120,9 @@ export default {
         return {}
       }
     },
+    showWeight() {
+      return this.$parent.playlistShowWeights
+    }
   },
 
   methods: {
@@ -117,7 +134,7 @@ export default {
     save() {
       this.updateMetadata({
         entry: this.data[this.editing],
-        modifications: {artist: this.artist, title: this.title}
+        modifications: {artist: this.artist, title: this.title, weight: this.weight}
       })
     },
     cancel() {
@@ -163,6 +180,7 @@ export default {
       if (show) {
         this.artist = this.data[this.editing].artist
         this.title = this.data[this.editing].title
+        this.weight = this.data[this.editing].weight
 
         await this.$nextTick()
         this.$refs.artist.focus()
