@@ -12,7 +12,7 @@
     "axios": "0.19.2",
     "core-js": "3.6.4",
     "flexsearch": "0.6.32",
-    "papaparse": "5.1.1",
+    "papaparse": "5.2.0",
     "roboto-fontface": "*",
     "vue": "2.6.11",
     "vue-router": "3.1.5",
