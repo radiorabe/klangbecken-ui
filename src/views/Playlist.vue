@@ -75,8 +75,8 @@
           :class="{disabled: entry.weight === 0}"
         >
           <p class="mb-0 mr-1 text-truncate flex-grow-1" :class="{'flex-shrink-0': (hovering !== entry.id)}">
-            <span class="subtitle-1 font-weight-bold">{{entry.title || '&lt;Unbekanter Titel>'}}</span> von
-            <span class="subtitle-1 font-italic">{{entry.artist || '&lt;Unbekanter Artist>'}}</span>
+            <span class="subtitle-1 font-weight-bold">{{entry.title || '&lt;Unbekannter Titel>'}}</span> von
+            <span class="subtitle-1 font-italic">{{entry.artist || '&lt;Unbekannter Artist>'}}</span>
             <span class="ml-2 caption">
               (Plays: {{entry.play_count}}<span v-if="playlistShowWeights"> &mdash; Priorität: {{entry.weight}}</span>)
             </span>
