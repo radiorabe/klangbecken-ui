@@ -46,6 +46,19 @@
                 class="ml-2 pa-0"
               ></v-text-field>
             </v-col>
+            <v-col v-if="hasMarked">
+              <div class="pl-4 pt-2 mr-0">
+                <v-btn
+                  color="error"
+                  :disabled="!isLoggedIn || !online"
+                  class="ml-auto"
+                  @click="deleteMultipleTracks"
+                  small
+                >
+                  <v-icon small left>mdi-delete</v-icon>markierte Löschen
+                </v-btn>
+              </div>
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -66,12 +79,13 @@
             @mouseover="hovering = entry.id"
             @mouseleave="hovering = ''"
             style="flex"
-            class="d-flex justify-space-between align-center flex-nowrap"
-            :class="{disabled: entry.weight === 0}"
+            class="d-flex justify-space-between align-center flex-nowrap, lighten-3"
+            :class="{disabled: entry.weight === 0, 'grey': (isMarked(entry))}"
           >
             <p
               class="mb-0 mr-1 text-truncate flex-grow-1"
               :class="{'flex-shrink-0': (hovering !== entry.id)}"
+              @click="toggleMark(entry)"
             >
               <span
                 class="subtitle-1 font-weight-bold"
@@ -170,7 +184,8 @@ export default {
       search: "",
       editing: "",
       removing: "",
-      hovering: ""
+      hovering: "",
+      marked: []
     };
   },
   props: ["playlist"],
@@ -223,6 +238,9 @@ export default {
         }
       });
       return playlist;
+    },
+    hasMarked() {
+      return this.marked.length > 0;
     }
   },
   methods: {
@@ -240,6 +258,35 @@ export default {
     },
     remove(entry) {
       this.removing = entry.id;
+    },
+    toggleMark(entry) {
+      let currentIndex = this.marked.indexOf(entry.id);
+      if (currentIndex == -1) {
+        this.marked.push(entry.id);
+      } else {
+        this.marked.splice(currentIndex, 1);
+      }
+    },
+    isMarked(entry) {
+      return this.marked.indexOf(entry.id) != -1;
+    },
+    async deleteMultipleTracks() {
+      let confirmed = confirm("" + this.marked.length + " Tracks löschen?");
+      if (confirmed) {
+        this.marked.forEach(entryId => {
+          console.log(entryId);
+          let entry = this.data[entryId];
+          console.log(entry);
+          try {
+            axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`);
+            this.removeItem(entry.id);
+            this.success("Datei wurde gelöscht.");
+          } catch (err) {
+            this.error("Datei konnte nicht gelöscht werden.");
+          }
+        });
+        this.marked = [];
+      }
     },
     async playNext(entry) {
       try {
