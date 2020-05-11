@@ -15,8 +15,7 @@
           <ul class="my-1">
             <li class="font-italic">{{entry.original_filename}}</li>
             <li>{{entry.artist || '&lt;Unbekannter Artist>'}} &mdash; {{entry.title || '&lt;Unbekannter Titel>'}}</li>
-          </ul>
-          wirklich löschen?
+          </ul>wirklich löschen?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -29,49 +28,47 @@
 </template>
 
 <script>
-import axios from 'axios'
-import {mapGetters, mapMutations} from 'vuex'
+import axios from "axios";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
-  name: 'RemoveConfirmation',
-  props: [
-    'removing'
-  ],
+  name: "RemoveConfirmation",
+  props: ["removing"],
   computed: {
-    ...mapGetters(['data']),
+    ...mapGetters(["data"]),
     show() {
-      return this.removing !== '' && this.data[this.removing]
+      return this.removing !== "" && this.data[this.removing];
     },
     entry() {
       if (this.show) {
-        return this.data[this.removing]
+        return this.data[this.removing];
       } else {
-        return {}
+        return {};
       }
     }
   },
 
   methods: {
-    ...mapMutations(['removeItem', 'success', 'error']),
+    ...mapMutations(["removeItem", "success", "error"]),
     next() {
-      this.$refs.title.focus()
+      this.$refs.title.focus();
     },
     async remove() {
-      let entry = this.data[this.removing]
+      let entry = this.data[this.removing];
       try {
-        await axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`)
-        this.removeItem(entry.id)
-        this.success('Datei wurde gelöscht.')
+        await axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`);
+        this.removeItem(entry.id);
+        this.success("Datei wurde gelöscht.");
       } catch (err) {
-        this.error('Datei konnte nicht gelöscht werden.')
+        this.error("Datei konnte nicht gelöscht werden.");
       }
-      this.$emit('done')
+      this.$emit("done");
     },
     cancel() {
-      this.$emit('done')
-    },
-  },
-}
+      this.$emit("done");
+    }
+  }
+};
 </script>
 
 <style scoped>

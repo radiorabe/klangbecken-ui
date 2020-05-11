@@ -1,7 +1,7 @@
 export default {
   state: {
     preview: {},
-    isPreviewing: false
+    isPreviewing: false,
   },
 
   getters: {
@@ -9,24 +9,23 @@ export default {
     isPreviewing: (state) => state.isPreviewing,
     previewPath: (state) => {
       if (state.isPreviewing) {
-        return `/data/${state.preview.playlist}/${state.preview.id}${state.preview.ext}`
+        return `/data/${state.preview.playlist}/${state.preview.id}${state.preview.ext}`;
       } else {
-        return ''
+        return "";
       }
     },
   },
 
   mutations: {
     setPreview: (state, preview) => {
-      state.preview = preview
-      state.isPreviewing = true
+      state.preview = preview;
+      state.isPreviewing = true;
     },
     clearPreview: (state) => {
-      state.preview = {}
-      state.isPreviewing = false
+      state.preview = {};
+      state.isPreviewing = false;
     },
   },
 
-  actions: {
-  },
-}
+  actions: {},
+};

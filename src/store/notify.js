@@ -9,16 +9,15 @@ export default {
 
   mutations: {
     error: (state, message) => {
-      state.notifications.push({type: 'error', message})
+      state.notifications.push({ type: "error", message });
     },
     success: (state, message) => {
-      state.notifications.push({type: 'success', message})
+      state.notifications.push({ type: "success", message });
     },
     popNotification: (state) => {
-      return state.notifications.shift()
+      return state.notifications.shift();
     },
   },
 
-  actions: {
-  },
-}
+  actions: {},
+};

@@ -1,12 +1,12 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-import auth from './auth'
-import data from './data'
-import notify from './notify'
-import preview from './preview'
+import auth from "./auth";
+import data from "./data";
+import notify from "./notify";
+import preview from "./preview";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   strict: true,
@@ -14,11 +14,11 @@ export default new Vuex.Store({
     online: true,
   },
   getters: {
-    online: (state) => state.online
+    online: (state) => state.online,
   },
   mutations: {
-    setOnline: (state) => state.online = true,
-    setOffline: (state) => state.online = false,
+    setOnline: (state) => (state.online = true),
+    setOffline: (state) => (state.online = false),
   },
   actions: {},
   modules: {
@@ -26,5 +26,5 @@ export default new Vuex.Store({
     data,
     notify,
     preview,
-  }
-})
+  },
+});

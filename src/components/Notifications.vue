@@ -13,35 +13,34 @@
     >
       {{entry.text}}
       <v-btn dark text v-on:click="hide(entry)">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </v-snackbar>
   </div>
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex'
-
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
-  name: 'Notifications',
+  name: "Notifications",
   data() {
     return {
-      entries: [],
-    }
+      entries: []
+    };
   },
   computed: {
-    ...mapGetters(['notifications']),
+    ...mapGetters(["notifications"])
   },
   methods: {
-    ...mapMutations(['popNotification']),
+    ...mapMutations(["popNotification"]),
     hide(entry) {
-      entry.show = false
-      this.$forceUpdate()
+      entry.show = false;
+      this.$forceUpdate();
     },
     update() {
-      this.$forceUpdate()
-    },
+      this.$forceUpdate();
+    }
   },
   watch: {
     notifications() {
@@ -49,22 +48,22 @@ export default {
         // Find first empty slot
         for (var entry of this.entries) {
           if (!entry.show) {
-            break
+            break;
           }
         }
         // `entries` empty, or full
         if (!entry || entry.show) {
-          entry = {}
-          this.entries.push(entry)
+          entry = {};
+          this.entries.push(entry);
         }
-        entry.color = this.notifications[0].type
-        entry.text = this.notifications[0].message
-        entry.show = true
-        this.$forceUpdate()
+        entry.color = this.notifications[0].type;
+        entry.text = this.notifications[0].message;
+        entry.show = true;
+        this.$forceUpdate();
 
-        this.popNotification()
+        this.popNotification();
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
