@@ -42,8 +42,7 @@
             :thumb-size="20"
             thumb-label="always"
             class="mt-5"
-          >
-          </v-slider>
+          ></v-slider>
           <p class="mt-2 mb-0">
             <span class="subtitle-1">Dateiname:</span>
             <span class="ml-2">{{item.original_filename}}</span>
@@ -58,7 +57,9 @@
           </p>
           <p class="mb-0">
             <span class="subtitle-1">Länge:</span>
-            <span class="ml-2">{{toMinutes(item.length)}} ({{Math.round(100 * item.length) / 100}} s)</span>
+            <span
+              class="ml-2"
+            >{{toMinutes(item.length)}} ({{Math.round(100 * item.length) / 100}} s)</span>
           </p>
           <p class="mb-0">
             <span class="subtitle-1">Cue in:</span>
@@ -82,8 +83,12 @@
           </p>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="secondary" text :disabled="isFirst()" @click="prev" title="[Ctrl]-[Links]"><v-icon>mdi-chevron-left</v-icon></v-btn>
-          <v-btn color="secondary" text :disabled="isLast()" @click="next" title="[Ctrl]-[Rechts]"><v-icon>mdi-chevron-right</v-icon></v-btn>
+          <v-btn color="secondary" text :disabled="isFirst()" @click="prev" title="[Ctrl]-[Links]">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-btn color="secondary" text :disabled="isLast()" @click="next" title="[Ctrl]-[Rechts]">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn color="secondary" text @click="cancel" title="[Esc]">Abbrechen</v-btn>
           <v-btn color="secondary" @click="save(); cancel()">Speichern</v-btn>
@@ -94,100 +99,106 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations, mapActions} from 'vuex'
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
-  name: 'Edit',
+  name: "Edit",
   data() {
     return {
-      artist: '',
-      title: '',
-      weight: 0,
-    }
+      artist: "",
+      title: "",
+      weight: 0
+    };
   },
-  props: [
-    'editing'
-  ],
+  props: ["editing"],
   computed: {
-    ...mapGetters(['data']),
+    ...mapGetters(["data"]),
     show() {
-      return this.editing !== '' && this.data[this.editing]
+      return this.editing !== "" && this.data[this.editing];
     },
     item() {
       if (this.show) {
-        return this.data[this.editing]
+        return this.data[this.editing];
       } else {
-        return {}
+        return {};
       }
     },
     showWeight() {
-      return this.$parent.playlistShowWeights
+      return this.$parent.playlistShowWeights;
     }
   },
 
   methods: {
-    ...mapMutations(['error']),
-    ...mapActions(['updateMetadata']),
+    ...mapMutations(["error"]),
+    ...mapActions(["updateMetadata"]),
     tabbyEnter() {
-      this.$refs.title.focus()
+      this.$refs.title.focus();
     },
     save() {
       this.updateMetadata({
         entry: this.data[this.editing],
-        modifications: {artist: this.artist, title: this.title, weight: this.weight}
-      })
+        modifications: {
+          artist: this.artist,
+          title: this.title,
+          weight: this.weight
+        }
+      });
     },
     cancel() {
-      this.$emit('done')
+      this.$emit("done");
     },
     isFirst() {
-      let idx = this.$parent.playlistData.findIndex((item) => item === this.item)
-      return idx === 0
+      let idx = this.$parent.playlistData.findIndex(item => item === this.item);
+      return idx === 0;
     },
     isLast() {
-      let idx = this.$parent.playlistData.findIndex((item) => item === this.item)
-      return idx === this.$parent.playlistData.length - 1
+      let idx = this.$parent.playlistData.findIndex(item => item === this.item);
+      return idx === this.$parent.playlistData.length - 1;
     },
     prev() {
       if (this.artist !== this.item.artist || this.title !== this.item.title) {
-        this.error('Nicht gespeicherte Änderungen.')
+        this.error("Nicht gespeicherte Änderungen.");
       } else {
-        let idx = this.$parent.playlistData.findIndex((item) => item === this.item)
+        let idx = this.$parent.playlistData.findIndex(
+          item => item === this.item
+        );
         if (idx > 0) {
-          this.$parent.editing = this.$parent.playlistData[idx - 1].id
+          this.$parent.editing = this.$parent.playlistData[idx - 1].id;
         }
       }
     },
     next() {
       if (this.artist !== this.item.artist || this.title !== this.item.title) {
-        this.error('Nicht gespeicherte Änderungen.')
+        this.error("Nicht gespeicherte Änderungen.");
       } else {
-        let idx = this.$parent.playlistData.findIndex((item) => item === this.item)
+        let idx = this.$parent.playlistData.findIndex(
+          item => item === this.item
+        );
         if (idx < this.$parent.playlistData.length - 1) {
-          this.$parent.editing = this.$parent.playlistData[idx + 1].id
+          this.$parent.editing = this.$parent.playlistData[idx + 1].id;
         }
       }
     },
     toMinutes(seconds) {
-      let minutes = Math.round(seconds / 60)
-      seconds = `00${Math.round(seconds % 60)}`
-      seconds = seconds.substr(seconds.length - 2)
-      return `${minutes}:${seconds}`
-    },
+      let minutes = Math.round(seconds / 60);
+      seconds = `00${Math.round(seconds % 60)}`;
+      seconds = seconds.substr(seconds.length - 2);
+      return `${minutes}:${seconds}`;
+    }
   },
   watch: {
     async show(show) {
       if (show) {
-        this.artist = this.data[this.editing].artist
-        this.title = this.data[this.editing].title
-        this.weight = this.data[this.editing].weight
+        this.artist = this.data[this.editing].artist;
+        this.title = this.data[this.editing].title;
+        this.weight = this.data[this.editing].weight;
 
-        await this.$nextTick()
-        this.$refs.artist.focus()
+        await this.$nextTick();
+        this.$refs.artist.focus();
       }
     }
-  },
-}
+  }
+};
 </script>
 
 <style scoped>

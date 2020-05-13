@@ -48,53 +48,53 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations, mapActions} from 'vuex'
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
       loginform: {},
-      checking: false,
-    }
+      checking: false
+    };
   },
-  props: ['show'],
+  props: ["show"],
   computed: {
-    ...mapGetters(['isLoggedIn', 'username'])
+    ...mapGetters(["isLoggedIn", "username"])
   },
   methods: {
     async tryLogin() {
       try {
-        this.checking = true
-        await this.login(this.loginform)
-        this.loginform = {}
-        this.$emit('done')
-        this.success('Login erfolgreich.')
+        this.checking = true;
+        await this.login(this.loginform);
+        this.loginform = {};
+        this.$emit("done");
+        this.success("Login erfolgreich.");
       } catch (err) {
-        this.error('Login ist fehlgeschlagen. ')
-        this.loginform.password = ''
+        this.error("Login ist fehlgeschlagen. ");
+        this.loginform.password = "";
       }
-      this.checking = false
+      this.checking = false;
     },
     next() {
-      this.$refs.password.focus()
+      this.$refs.password.focus();
     },
     cancel() {
-      this.loginform = {}
-      this.$emit('done')
+      this.loginform = {};
+      this.$emit("done");
     },
-    ...mapActions(['login', 'logout']),
-    ...mapMutations(['success', 'error']),
+    ...mapActions(["login", "logout"]),
+    ...mapMutations(["success", "error"])
   },
   watch: {
     async show(show) {
       if (show) {
-        await this.$nextTick()
-        this.$refs.username.focus()
+        await this.$nextTick();
+        this.$refs.username.focus();
       }
     }
-  },
-}
+  }
+};
 </script>
 
 <style scoped>

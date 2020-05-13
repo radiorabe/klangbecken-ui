@@ -8,8 +8,7 @@
       small
       v-if="!uploading"
     >
-      <v-icon small left>mdi-file-music</v-icon>
-      Dateien hochladen
+      <v-icon small left>mdi-file-music</v-icon>Dateien hochladen
     </v-btn>
     <v-list-item two-line v-else>
       <v-list-item-content>
@@ -23,9 +22,9 @@
             height="10"
           ></v-progress-linear>
         </v-list-item-title>
-        <v-list-item-subtitle class="text-center">
-          {{processing ? 'Audio analysieren' : 'Files transferieren'}}
-        </v-list-item-subtitle>
+        <v-list-item-subtitle
+          class="text-center"
+        >{{processing ? 'Audio analysieren' : 'Files transferieren'}}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
     <input
@@ -41,94 +40,96 @@
 </template>
 
 <script>
-import axios from 'axios'
-import {mapGetters, mapMutations, mapActions} from 'vuex'
+import axios from "axios";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
-  name: 'FileUpload',
+  name: "FileUpload",
   data() {
     return {
       uploading: false,
       progress: 0,
-      processing: false,
-    }
+      processing: false
+    };
   },
-  props: [
-    'playlist'
-  ],
+  props: ["playlist"],
   computed: {
-  ...mapGetters(['isLoggedIn', 'data', 'online']),
+    ...mapGetters(["isLoggedIn", "data", "online"])
   },
   methods: {
-    ...mapMutations(['error', 'success', 'addItem']),
-    ...mapActions(['updateMetadata']),
+    ...mapMutations(["error", "success", "addItem"]),
+    ...mapActions(["updateMetadata"]),
 
     showUploadDialog() {
-      this.$refs.fileupload.click()
+      this.$refs.fileupload.click();
     },
 
     async upload(ev) {
-      this.progress = 0
-      this.uploading = true
-      let files = ev.srcElement.files
+      this.progress = 0;
+      this.uploading = true;
+      let files = ev.srcElement.files;
 
-      let chunks = [...files].reduce((chunks, file) => {
-        if (chunks[chunks.length - 1].length === 4) {
-          chunks.push([])
-        }
-        chunks[chunks.length - 1].push(file)
-        return chunks
-      }, [[]])
+      let chunks = [...files].reduce(
+        (chunks, file) => {
+          if (chunks[chunks.length - 1].length === 4) {
+            chunks.push([]);
+          }
+          chunks[chunks.length - 1].push(file);
+          return chunks;
+        },
+        [[]]
+      );
 
-      let progress = 0
-      let successes = 0
+      let progress = 0;
+      let successes = 0;
       for (let chunk of chunks) {
-        let promises = []
-        let progresses = chunk.map(() => 0)
+        let promises = [];
+        let progresses = chunk.map(() => 0);
         for (const [index, file] of chunk.entries()) {
           let formData = new FormData();
-          formData.append('file', file);
-          let promise = axios.post(
-            `/api/${this.playlist}/`,
-            formData,
-            {
-              headers: { 'Content-Type': 'multipart/form-data' },
-              onUploadProgress: (progressEvent) => {
-                progresses[index] = progressEvent.loaded / progressEvent.total;
-                let current_progress = progresses.reduce((a, b) => a + b)
-                this.progress = (progress + current_progress) / files.length * 100
-                if (current_progress === progresses.length) {
-                  this.processing = true
-                }
+          formData.append("file", file);
+          let promise = axios.post(`/api/${this.playlist}/`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+            onUploadProgress: progressEvent => {
+              progresses[index] = progressEvent.loaded / progressEvent.total;
+              let current_progress = progresses.reduce((a, b) => a + b);
+              this.progress =
+                ((progress + current_progress) / files.length) * 100;
+              if (current_progress === progresses.length) {
+                this.processing = true;
               }
             }
-          )
-          promises.push(promise)
+          });
+          promises.push(promise);
         }
 
-        let results = await Promise.allSettled(promises)
-        this.processing = false
+        let results = await Promise.allSettled(promises);
+        this.processing = false;
         for (let result of results) {
-          if (result.status === 'fulfilled') {
-            this.addItem(result.value.data)
-            successes += 1
+          if (result.status === "fulfilled") {
+            this.addItem(result.value.data);
+            successes += 1;
           } else {
-            this.error(result.reason.response.data.description)
+            this.error(result.reason.response.data.description);
           }
         }
-        progress += promises.length
+        progress += promises.length;
       }
       if (successes === files.length) {
-        this.success(`Alle ${successes} Dateien wurden erfolgreich hochgeladen`)
+        this.success(
+          `Alle ${successes} Dateien wurden erfolgreich hochgeladen`
+        );
       } else {
-        this.success(`${successes} von ${files.length} Dateien wurden erfolgreich hochgeladen`)
+        this.success(
+          `${successes} von ${files.length} Dateien wurden erfolgreich hochgeladen`
+        );
       }
       //this.progress = 0
-      this.uploading = false
+      this.uploading = false;
       //this.$refs.fileupload.value = ''
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style>

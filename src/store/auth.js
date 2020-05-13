@@ -1,63 +1,63 @@
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   state: {
-    token: localStorage.getItem('token'),
+    token: localStorage.getItem("token"),
   },
 
   getters: {
-    isLoggedIn: state => !!state.token,
-    payload: state => {
+    isLoggedIn: (state) => !!state.token,
+    payload: (state) => {
       if (!state.token) {
-        return {}
+        return {};
       }
       // Extract payload
-      let payload = state.token.split('.')[1]
+      let payload = state.token.split(".")[1];
       // Convert back to 'normal' base64
-      payload = payload.replace(/-/g, '+').replace(/_/g, '/')
+      payload = payload.replace(/-/g, "+").replace(/_/g, "/");
       // Decode and parse
-      return JSON.parse(atob(payload))
+      return JSON.parse(atob(payload));
     },
     username: (state, getters) => getters.payload.user,
   },
 
   mutations: {
     setToken: (state, newToken) => {
-      state.token = newToken
-      localStorage.setItem('token', newToken)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+      state.token = newToken;
+      localStorage.setItem("token", newToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
     },
     removeToken: (state) => {
-      state.token = ''
-      localStorage.removeItem('token')
-      delete axios.defaults.headers.common['Authorization']
+      state.token = "";
+      localStorage.removeItem("token");
+      delete axios.defaults.headers.common["Authorization"];
     },
   },
 
   actions: {
-    async renewToken({commit, state, getters}) {
-      let token = state.token
+    async renewToken({ commit, state, getters }) {
+      let token = state.token;
       if (token && getters.online) {
         try {
-          let response = await axios.post('/api/auth/renew/', {token})
-          commit('setToken', response.data.token)
+          let response = await axios.post("/api/auth/renew/", { token });
+          commit("setToken", response.data.token);
         } catch (err) {
-          commit('removeToken')
+          commit("removeToken");
         }
       }
     },
-    async login({commit}, credentials) {
-      let body = new URLSearchParams()
-      body.append('login', credentials.username || '')
-      body.append('password', credentials.password || '')
+    async login({ commit }, credentials) {
+      let body = new URLSearchParams();
+      body.append("login", credentials.username || "");
+      body.append("password", credentials.password || "");
 
-      let response = await axios.post('/api/auth/login/', body)
+      let response = await axios.post("/api/auth/login/", body);
 
-      let new_token = response.data.token
-      commit('setToken', new_token)
+      let new_token = response.data.token;
+      commit("setToken", new_token);
     },
-    async logout({commit}) {
-      commit('removeToken')
+    async logout({ commit }) {
+      commit("removeToken");
     },
   },
-}
+};
