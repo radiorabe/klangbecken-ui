@@ -7,7 +7,7 @@
       <v-container fluid class="ma-0 pa-0">
         <v-row no-gutters justify="start">
           <v-col lg="3" md="4" sm="5" col="6">
-            <v-card-title>{{playlistName}} Playliste</v-card-title>
+            <v-card-title>{{playlistName}} Playliste ({{playlistData.length}} Songs)</v-card-title>
             <v-card-subtitle v-html="playlistDescription"></v-card-subtitle>
           </v-col>
           <v-col lg="9" md="8" sm="7" col="6">
