@@ -1,0 +1,17 @@
+name: Node.js CI
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 0.12
+    - run: npm install
+    - run: npm run build --if-present
+    - run: npm run lint
