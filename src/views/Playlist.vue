@@ -274,9 +274,7 @@ export default {
       let confirmed = confirm("" + this.marked.length + " Tracks löschen?");
       if (confirmed) {
         this.marked.forEach(entryId => {
-          console.log(entryId);
           let entry = this.data[entryId];
-          console.log(entry);
           try {
             axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`);
             this.removeItem(entry.id);
