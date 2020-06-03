@@ -1,5 +1,6 @@
 <template>
   <v-toolbar-items class="disable-events">
+    <NextTrack/>
     <template v-if="online">
       <v-btn small tile depressed :ripple="false" text>{{currentSong}}</v-btn>
       <v-btn small depressed tile :disabled="!onair" :ripple="false" text>
@@ -22,6 +23,7 @@
 <script>
 import axios from "axios";
 import { mapGetters, mapMutations } from "vuex";
+import NextTrack from "@/components/NextTrack.vue";
 
 const POLL_TIMEOUT = 3000;
 
@@ -90,6 +92,9 @@ export default {
   },
   methods: {
     ...mapMutations(["setOnline", "setOffline", "error"])
+  },
+  components: {
+    NextTrack,
   }
 };
 </script>
