@@ -3,6 +3,9 @@
 # abort on errors
 set -e
 
+# install deps
+npm install
+
 # build
 npm run build
 
