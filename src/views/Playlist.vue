@@ -79,8 +79,13 @@
             @mouseover="hovering = entry.id"
             @mouseleave="hovering = ''"
             style="flex"
-            class="d-flex justify-space-between align-center flex-nowrap, lighten-3"
-            :class="{disabled: entry.weight === 0, 'grey': (isMarked(entry))}"
+            class="d-flex justify-space-between align-center flex-nowrap"
+            :class="{
+                disabled: entry.weight === 0,
+                'grey lighten-3': (isMarked(entry) && hovering !== entry.id),
+                'teal lighten-5': (!isMarked(entry) && hovering === entry.id),
+                'blue-grey lighten-4': (isMarked(entry) && hovering === entry.id)
+            }"
           >
             <p
               class="mb-0 mr-1 text-truncate flex-grow-1"
