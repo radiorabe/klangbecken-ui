@@ -281,7 +281,7 @@ export default {
         this.marked.forEach(entryId => {
           let entry = this.data[entryId];
           try {
-            axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`);
+            axios.delete(`/api/${entry.playlist}/${entry.id}.${entry.ext}`);
             this.removeItem(entry.id);
             this.success("Datei wurde gelöscht.");
           } catch (err) {
@@ -294,7 +294,7 @@ export default {
     async playNext(entry) {
       try {
         await axios.post(`/api/playnext/`, {
-          file: `${entry.playlist}/${entry.id}${entry.ext}`
+          file: `${entry.playlist}/${entry.id}.${entry.ext}`
         });
         this.success(
           `Der Song '${entry.title}' wird als nächstes im Klangbecken abgespielt.`

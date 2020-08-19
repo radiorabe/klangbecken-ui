@@ -56,7 +56,7 @@ export default {
     async remove() {
       let entry = this.data[this.removing];
       try {
-        await axios.delete(`/api/${entry.playlist}/${entry.id}${entry.ext}`);
+        await axios.delete(`/api/${entry.playlist}/${entry.id}.${entry.ext}`);
         this.removeItem(entry.id);
         this.success("Datei wurde gelöscht.");
       } catch (err) {

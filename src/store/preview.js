@@ -9,7 +9,7 @@ export default {
     isPreviewing: (state) => state.isPreviewing,
     previewPath: (state) => {
       if (state.isPreviewing) {
-        return `/data/${state.preview.playlist}/${state.preview.id}${state.preview.ext}`;
+        return `/data/${state.preview.playlist}/${state.preview.id}.${state.preview.ext}`;
       } else {
         return "";
       }

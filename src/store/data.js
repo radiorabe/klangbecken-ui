@@ -17,6 +17,12 @@ export default {
 
   mutations: {
     setData: (state, newData) => {
+      // FIXME: Temporarily check for extension prefixed by dot and fix it
+      for (let entry of Object.values(newData)) {
+        if (entry.ext.startsWith('.')) {
+          entry.ext = entry.ext.substring(1)
+        }
+      }
       index.add(Object.values(newData));
       state.data = newData;
     },
@@ -54,7 +60,7 @@ export default {
     },
     async updateMetadata({ commit }, { entry, modifications }) {
       try {
-        let path = `/api/${entry.playlist}/${entry.id}${entry.ext}`;
+        let path = `/api/${entry.playlist}/${entry.id}.${entry.ext}`;
         await axios.put(path, modifications);
         commit("updateItem", { itemId: entry.id, modifications });
         commit("success", "Metadaten wurden gespeichert.");
