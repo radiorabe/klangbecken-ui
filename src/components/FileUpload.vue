@@ -88,7 +88,7 @@ export default {
         for (const [index, file] of chunk.entries()) {
           let formData = new FormData();
           formData.append("file", file);
-          let promise = axios.post(`/api/${this.playlist}/`, formData, {
+          let promise = axios.post(`/api/playlist/${this.playlist}/`, formData, {
             headers: { "Content-Type": "multipart/form-data" },
             onUploadProgress: progressEvent => {
               progresses[index] = progressEvent.loaded / progressEvent.total;

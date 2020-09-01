@@ -62,7 +62,7 @@ export default {
     },
     async updateMetadata({ commit }, { entry, modifications }) {
       try {
-        let path = `/api/${entry.playlist}/${entry.id}.${entry.ext}`;
+        let path = `/api/playlist/${entry.playlist}/${entry.id}.${entry.ext}`;
         await axios.put(path, modifications);
         commit("updateItem", { itemId: entry.id, modifications });
         commit("success", "Metadaten wurden gespeichert.");
