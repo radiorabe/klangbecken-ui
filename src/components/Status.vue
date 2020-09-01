@@ -1,12 +1,21 @@
 <template>
   <v-toolbar-items class="disable-events">
-    <template v-if="online">
+    <template v-if="state === 'online'">
       <v-btn small tile depressed :ripple="false" text>{{currentSong}}</v-btn>
-      <v-btn small depressed tile :disabled="!onair" :ripple="false" text>
-        O{{onair ? 'n' : 'ff'}} Air:
+      <v-btn small depressed tile :disabled="!onAir" :ripple="false" text>
+        O{{onAir ? 'n' : 'ff'}} Air:
         <v-icon color="green">mdi-access-point</v-icon>
       </v-btn>
     </template>
+    <v-btn
+      v-else-if="state === 'not_running'"
+      small
+      depressed
+      tile
+      disabled
+      :ripple="false"
+      text
+    >Player läuft nicht</v-btn>
     <v-btn
       v-else
       small
@@ -20,71 +29,33 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapGetters, mapMutations } from "vuex";
-
-const POLL_TIMEOUT = 3000;
 
 export default {
   name: "Status",
 
-  created() {
-    let poll = async () => {
-      try {
-        let response = await axios.get("/data/log/current.json", {
-          timeout: POLL_TIMEOUT - 100,
-          headers: {
-            "If-Modified-Since": "invalid"
-          }
-        });
-        this.current = response.data;
-        if (!this.online) {
-          this.setOnline();
-        }
-      } catch (err) {
-        if (
-          err.message === "Network Error" ||
-          err.message.startsWith("timeout")
-        ) {
-          this.setOffline();
-        } else {
-          this.error(
-            `Klangbecken-Status konnte nicht abgefrag werden: ${err.message}`
-          );
-        }
-      }
-    };
+  created() {},
 
-    this.polling = setInterval(poll, POLL_TIMEOUT);
-    poll();
-  },
-
-  beforeDestroy() {
-    clearInterval(this.polling);
-  },
+  beforeDestroy() {},
 
   data() {
-    return {
-      current: false,
-      polling: null
-    };
+    return {};
   },
   computed: {
-    ...mapGetters(["online"]),
-    onair() {
-      return !!this.current;
-    },
+    ...mapGetters(["state", "data", "hasData", "info", "onAir"]),
     currentSong() {
-      if (this.onair) {
-        if (this.current.title || this.current.artist) {
-          let artist = this.current.artist || "<Unknown Artist> ";
-          let title = this.current.title || "<Unknown Title> ";
-          return `Aktueller Song: ${artist} - ${title}`;
+      if (this.onAir && this.hasData) {
+        let id = this.info.on_air.id
+        let current = this.data[id]
+        if (current.title || current.artist) {
+          let artist = current.artist || "<Unknown Artist> ";
+          let title = current.title || "<Unknown Title> ";
+          return `Aktueller Song: ${artist} - ${title}`
         } else {
-          return `Aktueller Song: ${this.current.original_filename}`;
+          return `Aktueller Song: ${current.original_filename}`;
         }
       } else {
-        return "";
+        return ""
       }
     }
   },
