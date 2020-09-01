@@ -48,11 +48,11 @@
         ></v-progress-linear>
       </template>
     </v-app-bar>
-    <v-content>
+    <v-main>
       <v-container fluid>
         <router-view :key="$route.fullPath" v-if="!loadingData" />
       </v-container>
-    </v-content>
+    </v-main>
     <Login :show="showLogin" @done="showLogin = false" />
     <PreviewPlayer />
     <Notifications />
