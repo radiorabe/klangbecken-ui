@@ -293,11 +293,11 @@ export default {
     },
     async playNext(entry) {
       try {
-        await axios.post(`/api/playnext/`, {
-          file: `${entry.playlist}/${entry.id}.${entry.ext}`
+        await axios.post(`/api/player/queue/`, {
+          filename: `${entry.playlist}/${entry.id}.${entry.ext}`
         });
         this.success(
-          `Der Song '${entry.title}' wird als nächstes im Klangbecken abgespielt.`
+          `Der Song '${entry.title}' wird demnächst im Klangbecken abgespielt.`
         );
       } catch (err) {
         this.error("Der Song konnte nicht in die Queue aufgenommen werden.");
