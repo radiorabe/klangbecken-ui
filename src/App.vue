@@ -71,6 +71,7 @@ import Status from "@/components/Status.vue";
 import playlists from "@/playlists";
 
 const TOKEN_RENEW_TIMEOUT = 10 * 60 * 1000; // ten minutes
+const INFO_RENEW_TIMEOUT = 3 * 1000;
 
 export default {
   name: "app",
@@ -83,6 +84,8 @@ export default {
     return {
       data: {},
       tokenInterval: null,
+      infoInterval: null,
+      timeInterval: null,
       playlists: pls,
       showLogin: false
     };
@@ -94,6 +97,7 @@ export default {
     this.loadData();
     this.renewToken();
     this.tokenInterval = setInterval(this.renewToken, TOKEN_RENEW_TIMEOUT);
+    this.infoInterval = setInterval(this.loadInfo, INFO_RENEW_TIMEOUT, INFO_RENEW_TIMEOUT);
     axios.interceptors.response.use(
       resp => resp,
       async err => {
@@ -111,9 +115,14 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.tokenInterval);
+    clearInterval(this.infoInterval);
+    clearInterval(this.timeInterval);
+    this.tokenInterval = null;
+    this.infoInterval = null;
+    this.timeInterval = null;
   },
   methods: {
-    ...mapActions(["loadData", "renewToken", "logout"]),
+    ...mapActions(["loadData", "loadInfo", "renewToken", "logout"]),
     ...mapMutations(["error"])
   },
   components: {
