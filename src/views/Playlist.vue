@@ -281,7 +281,7 @@ export default {
         this.marked.forEach(entryId => {
           let entry = this.data[entryId];
           try {
-            axios.delete(`/api/${entry.playlist}/${entry.id}.${entry.ext}`);
+            axios.delete(`/api/playlist/${entry.playlist}/${entry.id}.${entry.ext}`);
             this.removeItem(entry.id);
             this.success("Datei wurde gelöscht.");
           } catch (err) {
