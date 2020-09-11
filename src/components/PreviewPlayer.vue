@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar :value="isPreviewing" bottom multi-line :timeout="0">
+  <v-snackbar :value="isPreviewing" bottom multi-line :timeout="-1">
     <audio :src="previewPath" v-on:ended="ended" autoplay controls></audio>
     {{preview.artist}}
     <br />

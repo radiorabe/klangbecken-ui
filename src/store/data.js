@@ -6,11 +6,12 @@ import index from "@/search";
 export default {
   state: {
     data: {},
-    loading: true,
+    loading: false,
+    hasData: false,
   },
 
   getters: {
-    hasData: (state) => !!state.data,
+    hasData: (state) => state.hasData,
     data: (state) => state.data,
     loadingData: (state) => state.loading,
   },
@@ -25,6 +26,7 @@ export default {
       }
       index.add(Object.values(newData));
       state.data = newData;
+      state.hasData = true;
     },
     addItem: (state, item) => {
       for (let key in item) {
