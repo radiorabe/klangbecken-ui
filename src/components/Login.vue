@@ -60,7 +60,7 @@ export default {
   },
   props: ["show"],
   computed: {
-    ...mapGetters(["isLoggedIn", "username"]),
+    ...mapGetters(["isLoggedIn", "username"])
   },
   methods: {
     async tryLogin() {
