@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-dialog
-      v-model="show"
+      :value="show"
       persistent
       max-width="300"
       :disabled="checking"
