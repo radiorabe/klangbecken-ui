@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-dialog
-      v-model="showForm"
+      :value="show"
       persistent
       max-width="300"
       :disabled="checking"
@@ -61,9 +61,6 @@ export default {
   props: ["show"],
   computed: {
     ...mapGetters(["isLoggedIn", "username"]),
-    showForm() {
-      return this.show;
-    }
   },
   methods: {
     async tryLogin() {
