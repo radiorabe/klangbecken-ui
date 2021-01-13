@@ -132,7 +132,7 @@ export default {
       let [year, month] = this.month.split("-").map(s => parseInt(s, 10));
       let newMonth = ((month + 11 + direction) % 12) + 1;
       let newYear = year + Math.floor((month + 11 + direction) / 12) - 1;
-      return `${newYear}-${newMonth}`;
+      return `${newYear}-${String(newMonth).padStart(2, "0")}`;
     }
   }
 };
