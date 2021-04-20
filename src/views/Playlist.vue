@@ -18,7 +18,7 @@
       <v-card-text class="py-0">
         <v-container fluid class="ma-0 pa-0">
           <v-row no-gutters justify="start">
-            <v-col lg="3" md="4" sm="5" col="12">
+            <v-col lg="3" md="4" sm="6" col="12">
               <v-select
                 v-model="orderKey"
                 :items="orderItems"
@@ -33,7 +33,7 @@
                 hide-details
               ></v-select>
             </v-col>
-            <v-col col="12" lg="4" md="5" sm="6">
+            <v-col lg="4" md="5" sm="6" >
               <v-text-field
                 v-model="search"
                 prepend-inner-icon="mdi-magnify"
@@ -46,13 +46,13 @@
                 class="ml-2 pa-0"
               ></v-text-field>
             </v-col>
-            <v-col v-if="hasMarked">
-              <div class="pl-4 pt-2 mr-0">
+            <v-col class="d-flex" lg="5" md="3" sm="12" v-if="hasMarked">
+              <div class="ml-auto pl-4 pt-2 mr-0">
                 <v-btn
                   color="error"
                   :disabled="!isLoggedIn || !online"
                   class="ml-auto"
-                  @click="deleteMultipleTracks"
+                  @click="remove(marked)"
                   small
                 >
                   <v-icon small left>mdi-delete</v-icon>markierte Löschen
@@ -261,8 +261,12 @@ export default {
     edit(entry) {
       this.editing = entry.id;
     },
-    remove(entry) {
-      this.removing = entry.id;
+    remove(entries) {
+      if (! (entries instanceof Array)) {
+        this.removing = [entries.id]
+      } else {
+        this.removing = entries;
+      }
     },
     toggleMark(entry) {
       let currentIndex = this.marked.indexOf(entry.id);
@@ -274,22 +278,6 @@ export default {
     },
     isMarked(entry) {
       return this.marked.indexOf(entry.id) != -1;
-    },
-    async deleteMultipleTracks() {
-      let confirmed = confirm("" + this.marked.length + " Tracks löschen?");
-      if (confirmed) {
-        this.marked.forEach(entryId => {
-          let entry = this.data[entryId];
-          try {
-            axios.delete(`/api/playlist/${entry.playlist}/${entry.id}.${entry.ext}`);
-            this.removeItem(entry.id);
-            this.success("Datei wurde gelöscht.");
-          } catch (err) {
-            this.error("Datei konnte nicht gelöscht werden.");
-          }
-        });
-        this.marked = [];
-      }
     },
     async playNext(entry) {
       try {
@@ -315,6 +303,7 @@ export default {
       return date.toLocaleDateString("de-CH", options);
     },
     async afterRemoving() {
+      this.marked = [];
       let length = this.search.length;
       this.search = this.search + " ";
       this.removing = "";
