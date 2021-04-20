@@ -44,8 +44,8 @@ export default {
   computed: {
     ...mapGetters(["state", "data", "hasData", "info", "onAir"]),
     currentSong() {
-      if (this.onAir && this.hasData) {
-        let id = this.info.on_air.id
+      if (this.onAir && this.hasData && this.info.current_track) {
+        let id = this.info.current_track.id
         let current = this.data[id]
         if (current.title || current.artist) {
           let artist = current.artist || "<Unknown Artist> ";

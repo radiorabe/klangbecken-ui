@@ -10,7 +10,7 @@ export default {
         state: (state) => state.state,
         online: (state) => state.state === "online",
         info: (state) => state.info,
-        onAir: (state) => state.state === "online" && "id" in state.info.on_air,
+        onAir: (state) => state.state === "online" && state.info.on_air,
     },
 
     mutations: {
