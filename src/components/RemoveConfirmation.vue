@@ -11,11 +11,19 @@
       <v-card>
         <v-card-title class="headline">Eintrag löschen?</v-card-title>
         <v-card-text>
-          Die Datei
-          <ul class="my-1">
-            <li class="font-italic">{{entry.original_filename}}</li>
-            <li>{{entry.artist || '&lt;Unbekannter Artist>'}} &mdash; {{entry.title || '&lt;Unbekannter Titel>'}}</li>
-          </ul>wirklich löschen?
+          Die Datei{{multiple ? 'n': ''}}
+          <ul class="my-1" v-if="multiple">
+            <li v-for="entry of entries" :key="entry.id">{{entry.artist || '&lt;Unbekannter Artist>'}} &mdash; {{entry.title || '&lt;Unbekannter Titel>'}}
+              <span class="font-italic">({{entry.original_filename}})</span>
+            </li>
+          </ul>
+          <ul class="my-1" v-else-if="one">
+            <li>
+              {{entries[0].artist || '&lt;Unbekannter Artist>'}} &mdash; {{entries[0].title || '&lt;Unbekannter Titel>'}}
+              <span class="font-italic">({{entries[0].original_filename}})</span>
+            </li>
+          </ul>
+          wirklich löschen?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -37,15 +45,22 @@ export default {
   computed: {
     ...mapGetters(["data"]),
     show() {
-      return this.removing !== "" && this.data[this.removing];
+      return this.removing !== "";
     },
-    entry() {
+    multiple() {
+      return this.entries.length > 1;
+    },
+    one() {
+      return this.entries.length === 1;
+    },
+    entries() {
       if (this.show) {
-        return this.data[this.removing];
+        return this.removing.filter(entry => entry in this.data)
+                            .map(entry => this.data[entry]);
       } else {
-        return {};
+        return [];
       }
-    }
+    },
   },
 
   methods: {
@@ -54,13 +69,15 @@ export default {
       this.$refs.title.focus();
     },
     async remove() {
-      let entry = this.data[this.removing];
-      try {
-        await axios.delete(`/api/playlist/${entry.playlist}/${entry.id}.${entry.ext}`);
-        this.removeItem(entry.id);
-        this.success("Datei wurde gelöscht.");
-      } catch (err) {
-        this.error("Datei konnte nicht gelöscht werden.");
+      let entries = this.entries
+      for (let entry of entries) {
+        try {
+          await axios.delete(`/api/playlist/${entry.playlist}/${entry.id}.${entry.ext}`);
+          this.removeItem(entry.id);
+          this.success(`Datei '${entry.original_filename}' wurde gelöscht.`);
+        } catch (err) {
+          this.error(`Datei '${entry.original_filename}' konnte nicht gelöscht werden.`);
+        }
       }
       this.$emit("done");
     },
