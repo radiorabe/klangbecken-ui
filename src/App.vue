@@ -56,6 +56,7 @@
     <Login :show="showLogin" @done="showLogin = false" />
     <PreviewPlayer />
     <Notifications />
+    <NeedReload :show="needReload"/>
   </v-app>
 </template>
 
@@ -64,6 +65,7 @@ import axios from "axios";
 import { mapGetters, mapMutations, mapActions } from "vuex";
 
 import Login from "@/components/Login.vue";
+import NeedReload from "@/components/NeedReload.vue";
 import Notifications from "@/components/Notifications.vue";
 import PreviewPlayer from "@/components/PreviewPlayer.vue";
 import Status from "@/components/Status.vue";
@@ -91,7 +93,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isLoggedIn", "username", "loadingData"])
+    ...mapGetters(["isLoggedIn", "username", "loadingData", "needReload"])
   },
   async created() {
     this.loadData();
@@ -127,6 +129,7 @@ export default {
   },
   components: {
     Login,
+    NeedReload,
     Notifications,
     PreviewPlayer,
     Status

@@ -4,6 +4,7 @@ export default {
     state: {
         state: "offline",
         info: {},
+        needReload: false,
     },
 
     getters: {
@@ -11,6 +12,7 @@ export default {
         online: (state) => state.state === "online",
         info: (state) => state.info,
         onAir: (state) => state.state === "online" && state.info.on_air,
+        needReload: (state) => state.needReload,
     },
 
     mutations: {
@@ -18,7 +20,11 @@ export default {
         setOffline: (state) => { state.state = "offline" },
         setNotRunning: (state) => {state.state = "not_running" },
         setInfo: (state, newInfo) => {
+            let oldVersion = state.info.api_version;
             state.info = newInfo;
+            if (oldVersion && oldVersion !== newInfo.api_version) {
+                state.needReload = true;
+            }
         },
     },
 
