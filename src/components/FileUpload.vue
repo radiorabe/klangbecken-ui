@@ -31,7 +31,7 @@
       type="file"
       ref="fileupload"
       multiple
-      accept="audio/*"
+      accept=".mp3"
       style="display: none;"
       @change="upload"
       :disabled="!isLoggedIn"
