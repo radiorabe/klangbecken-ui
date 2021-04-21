@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Playlist from '@/views/Playlist.vue'
+import Info from '@/views/Info.vue'
 import Stats from '@/views/Stats.vue'
 import NotFound from '@/views/NotFound.vue'
 
@@ -18,6 +19,12 @@ const routes = [
     name: 'playlist',
     path: `/:playlist(${Object.keys(playlists).join('|')})`,
     component: Playlist,
+    props: true,
+  },
+  {
+    name: 'info',
+    path: '/info',
+    component: Info,
     props: true,
   },
   {

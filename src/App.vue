@@ -38,6 +38,7 @@
             :to="`/${playlist}`"
           >{{entry.name}}</v-tab>
           <v-tab to="/stats">Statistik</v-tab>
+          <v-tab to="/info">Infos</v-tab>
         </v-tabs>
         <v-progress-linear
           :active="loadingData"
