@@ -18,12 +18,6 @@ export default {
 
   mutations: {
     setData: (state, newData) => {
-      // FIXME: Temporarily check for extension prefixed by dot and fix it
-      for (let entry of Object.values(newData)) {
-        if (entry.ext.startsWith('.')) {
-          entry.ext = entry.ext.substring(1)
-        }
-      }
       index.add(Object.values(newData));
       state.data = newData;
       state.hasData = true;
