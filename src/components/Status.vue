@@ -33,11 +33,6 @@ import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "Status",
-
-  created() {},
-
-  beforeDestroy() {},
-
   data() {
     return {};
   },

@@ -2,17 +2,18 @@
   <v-card>
     <v-container fluid class="ma-0 pa-4">
       <v-row>
-        <v-col class="title pl-4">
-          Player Information
-        </v-col>
+        <v-col class="title pl-4">Player Information</v-col>
       </v-row>
       <v-row v-if="onAir && hasData" class="mt-0">
         <v-col lg=1 md=2 sm=3 class="subtitle-2">Aktueller Track:</v-col>
         <v-col lg=11 md=10 sm=9 class="subtitle-2 font-weight-regular">
-          {{current.artist}} &mdash; {{current.title}} <span class="font-italic pl-2">(aus der Playlist {{currentSource}})</span>
+          {{current.artist}} &mdash; {{current.title}}
+          <span class="font-italic pl-2">(aus der Playlist {{currentSource}})</span>
         </v-col>
       </v-row>
-      <v-row v-else class="pt-0 mt-0 subtitle-2 font-weight-regular"><v-col><i>Nicht</i> "on air".</v-col></v-row>
+      <v-row v-else class="pt-0 mt-0 subtitle-2 font-weight-regular">
+        <v-col><span class="font-italic">Nicht</span> "on air".</v-col>
+      </v-row>
       <v-row>
         <v-col class="subtitle-1 font-weight-bold">Anstehende Tracks</v-col>
       </v-row>
@@ -29,7 +30,9 @@
         <v-col lg=2 md=2 sm=3 class="subtitle-1 font-weight-bold pb-4">Warteschlange</v-col>
       </v-row>
       <v-row v-if="!onAir" class="mt-0">
-        <v-col class="subtitle-2 font-weight-regular font-italic pb-6 pt-0 mt-0">Die Tracks werden abgespielt, sobald das Klangbecken wieder "on air" ist.</v-col>
+        <v-col class="subtitle-2 font-weight-regular font-italic pb-6 pt-0 mt-0">
+          Die Tracks werden abgespielt, sobald das Klangbecken wieder "on air" ist.
+        </v-col>
       </v-row>
       <template v-if="hasData && info.queue">
         <v-row v-for="entry, number of queue" :key="entry.id + entry.queue_id" class="my-0">
@@ -50,7 +53,9 @@
           </v-col>
         </v-row>
       </template>
-      <v-row v-else class="my-0"><v-col class="subtitle-2 font-weight-regular font-italic pt-0">Keine Einträge</v-col></v-row>
+      <v-row v-else class="my-0">
+        <v-col class="subtitle-2 font-weight-regular font-italic pt-0">Keine Einträge</v-col>
+      </v-row>
     </v-container>
 
     <v-divider />
@@ -59,10 +64,22 @@
       System Information
     </v-card-subtitle>
     <v-card-subtitle class="pt-2">
-      <p class="mt-0 mb-1"><span class="subtitle-2 font-weight-bold">UI Version:</span> <span class="subtitle-2 font-weight-regular">{{version}}</span></p>
-      <p class="mb-1"><span class="subtitle-2 font-weight-bold">API Version:</span> <span class="subtitle-2 font-weight-regular">{{info.api_version}}</span></p>
-      <p class="mb-1"><span class="subtitle-2 font-weight-bold">Player Version:</span> <span class="subtitle-2 font-weight-regular">{{info.liquidsoap_version}}</span></p>
-      <p class="mb-1"><span class="subtitle-2 font-weight-bold">Player Uptime:</span> <span class="subtitle-2 font-weight-regular">{{info.uptime}}</span></p>
+      <p class="mt-0 mb-1">
+        <span class="subtitle-2 font-weight-bold">UI Version: </span>
+        <span class="subtitle-2 font-weight-regular">{{version}}</span>
+      </p>
+      <p class="mb-1">
+        <span class="subtitle-2 font-weight-bold">API Version: </span>
+        <span class="subtitle-2 font-weight-regular">{{info.api_version}}</span>
+      </p>
+      <p class="mb-1">
+        <span class="subtitle-2 font-weight-bold">Player Version: </span>
+        <span class="subtitle-2 font-weight-regular">{{info.liquidsoap_version}}</span>
+      </p>
+      <p class="mb-1">
+        <span class="subtitle-2 font-weight-bold">Player Uptime: </span>
+        <span class="subtitle-2 font-weight-regular">{{info.uptime}}</span>
+      </p>
     </v-card-subtitle>
   </v-card>
 </template>

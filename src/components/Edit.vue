@@ -1,101 +1,99 @@
 <template>
-  <v-row justify="center">
-    <v-dialog
-      :value="show"
-      persistent
-      max-width="500"
-      @keydown.esc="cancel"
-      @click:outside="cancel"
-      @keydown.ctrl.left="prev"
-      @keydown.ctrl.right="next"
-    >
-      <v-card v-if="show">
-        <v-card-title class="headline">Bearbeiten</v-card-title>
-        <v-card-text class="pl-8 pr-12">
-          <v-text-field
-            label="Artist"
-            ref="artist"
-            required
-            autofocus
-            v-model="artist"
-            @keyup.enter="tabbyEnter"
-            @keyup.esc="cancel"
-            hint="Mit [Tab] oder [Enter] zum nächsten Feld springen"
-          ></v-text-field>
-          <v-text-field
-            label="Title"
-            ref="title"
-            required
-            v-model="title"
-            @keyup.enter="save"
-            @keyup.esc="cancel"
-            hint="Mit [Enter] abspeichern, mit [Esc] abbrechen"
-          ></v-text-field>
-          <v-slider
-            v-if="showWeight"
-            label="Priorität"
-            v-model="weight"
-            min="0"
-            max="9"
-            :hint="weight ? '' : 'Abgestellt'"
-            :color="weight ? 'primary': 'error'"
-            :thumb-size="20"
-            thumb-label="always"
-            class="mt-5"
-          ></v-slider>
-          <p class="mt-2 mb-0">
-            <span class="subtitle-1">Dateiname:</span>
-            <span class="ml-2">{{item.original_filename}}</span>
-          </p>
-          <p class="mb-0">
-            <span class="subtitle-1">Anzahl Plays:</span>
-            <span class="ml-2">{{item.play_count}}</span>
-          </p>
-          <p class="mb-0">
-            <span class="subtitle-1">Zuletzt gespielt:</span>
-            <span class="ml-2">{{item.last_play.replace('T', ' ').substr(0,19) || 'noch nie'}}</span>
-          </p>
-          <p class="mb-0">
-            <span class="subtitle-1">Länge:</span>
-            <span
-              class="ml-2"
-            >{{toMinutes(item.length)}} ({{Math.round(100 * item.length) / 100}} s)</span>
-          </p>
-          <p class="mb-0">
-            <span class="subtitle-1">Cue in:</span>
-            <span class="ml-2">{{Math.round(100 * item.cue_in) / 100}} s</span>
-          </p>
-          <p class="mb-0">
-            <span class="subtitle-1">Cue out:</span>
-            <span class="ml-2">{{Math.round(100 * item.cue_out) / 100}} s</span>
-          </p>
-          <p class="mb-0">
-            <span class="subtitle-1">Normalisierung:</span>
-            <span class="ml-2">{{item.track_gain}}</span>
-          </p>
-          <p class="mb-0">
-            <span class="subtitle-1">Importdatum:</span>
-            <span class="ml-2">{{item.import_timestamp.replace('T', ' ').substr(0,19)}}</span>
-          </p>
-          <p class="mb-0">
-            <span class="subtitle-1">ID:</span>
-            <span class="ml-2">{{item.id}}</span>
-          </p>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="secondary" text :disabled="isFirst()" @click="prev" title="[Ctrl]-[Links]">
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn color="secondary" text :disabled="isLast()" @click="next" title="[Ctrl]-[Rechts]">
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn color="secondary" text @click="cancel" title="[Esc]">Abbrechen</v-btn>
-          <v-btn color="secondary" @click="save(); cancel()">Speichern</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+  <v-dialog
+    :value="show"
+    persistent
+    max-width="500"
+    @keydown.esc="cancel"
+    @click:outside="cancel"
+    @keydown.ctrl.left="prev"
+    @keydown.ctrl.right="next"
+  >
+    <v-card v-if="show">
+      <v-card-title class="headline">Bearbeiten</v-card-title>
+      <v-card-text class="pl-8 pr-12">
+        <v-text-field
+          label="Artist"
+          ref="artist"
+          required
+          autofocus
+          v-model="artist"
+          @keyup.enter="tabbyEnter"
+          @keyup.esc="cancel"
+          hint="Mit [Tab] oder [Enter] zum nächsten Feld springen"
+        ></v-text-field>
+        <v-text-field
+          label="Title"
+          ref="title"
+          required
+          v-model="title"
+          @keyup.enter="save"
+          @keyup.esc="cancel"
+          hint="Mit [Enter] abspeichern, mit [Esc] abbrechen"
+        ></v-text-field>
+        <v-slider
+          v-if="showWeight"
+          label="Priorität"
+          v-model="weight"
+          min="0"
+          max="9"
+          :hint="weight ? '' : 'Abgestellt'"
+          :color="weight ? 'primary': 'error'"
+          :thumb-size="20"
+          thumb-label="always"
+          class="mt-5"
+        ></v-slider>
+        <p class="mt-2 mb-0">
+          <span class="subtitle-1">Dateiname:</span>
+          <span class="ml-2">{{item.original_filename}}</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Anzahl Plays:</span>
+          <span class="ml-2">{{item.play_count}}</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Zuletzt gespielt:</span>
+          <span class="ml-2">{{item.last_play.replace('T', ' ').substr(0,19) || 'noch nie'}}</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Länge:</span>
+          <span
+            class="ml-2"
+          >{{toMinutes(item.length)}} ({{Math.round(100 * item.length) / 100}} s)</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Cue in:</span>
+          <span class="ml-2">{{Math.round(100 * item.cue_in) / 100}} s</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Cue out:</span>
+          <span class="ml-2">{{Math.round(100 * item.cue_out) / 100}} s</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Normalisierung:</span>
+          <span class="ml-2">{{item.track_gain}}</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Importdatum:</span>
+          <span class="ml-2">{{item.import_timestamp.replace('T', ' ').substr(0,19)}}</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">ID:</span>
+          <span class="ml-2">{{item.id}}</span>
+        </p>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="secondary" text :disabled="isFirst()" @click="prev" title="[Ctrl]-[Links]">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-btn color="secondary" text :disabled="isLast()" @click="next" title="[Ctrl]-[Rechts]">
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn color="secondary" text @click="cancel" title="[Esc]">Abbrechen</v-btn>
+        <v-btn color="secondary" @click="save(); cancel()">Speichern</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>

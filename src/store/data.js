@@ -56,7 +56,6 @@ export default {
         commit("setData", response.data);
       } catch (err) {
         commit("error", "Daten konnten nicht geladen werden.");
-        // Show notification!
       }
       commit("endLoading");
     },
@@ -68,7 +67,6 @@ export default {
         commit("success", "Metadaten wurden gespeichert.");
       } catch (err) {
         commit("error", "Metadaten konnten nicht gespeichert werden.");
-        // Notification
       }
     },
   },
