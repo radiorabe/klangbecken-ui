@@ -8,7 +8,7 @@
       :timeout="6000"
       bottom
       left
-      :style="{bottom: (8 + index * 64) + 'px'}"
+      :style="{bottom: (8 + index * 70) + 'px'}"
       @input="update"
     >
       {{entry.text}}

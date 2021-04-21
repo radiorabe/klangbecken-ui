@@ -1,38 +1,37 @@
 <template>
-  <v-row justify="center">
-    <v-dialog
-      :value="show"
-      persistent
-      max-width="400"
-      @keydown.esc="cancel"
-      @keydown.enter="remove"
-      @click:outside="cancel"
-    >
-      <v-card>
-        <v-card-title class="headline">Eintrag löschen?</v-card-title>
-        <v-card-text>
-          Die Datei{{multiple ? 'n': ''}}
-          <ul class="my-1" v-if="multiple">
-            <li v-for="entry of entries" :key="entry.id">{{entry.artist || '&lt;Unbekannter Artist>'}} &mdash; {{entry.title || '&lt;Unbekannter Titel>'}}
-              <span class="font-italic">({{entry.original_filename}})</span>
-            </li>
-          </ul>
-          <ul class="my-1" v-else-if="one">
-            <li>
-              {{entries[0].artist || '&lt;Unbekannter Artist>'}} &mdash; {{entries[0].title || '&lt;Unbekannter Titel>'}}
-              <span class="font-italic">({{entries[0].original_filename}})</span>
-            </li>
-          </ul>
-          wirklich löschen?
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="secondary" outlined @click="cancel">Abbrechen</v-btn>
-          <v-btn color="secondary" @click="remove">Löschen</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+  <v-dialog
+    :value="show"
+    persistent
+    max-width="400"
+    @keydown.esc="cancel"
+    @keydown.enter="remove"
+    @click:outside="cancel"
+  >
+    <v-card>
+      <v-card-title class="headline">Eintrag löschen?</v-card-title>
+      <v-card-text>
+        Die Datei{{multiple ? 'en': ''}}
+        <ul class="my-1" v-if="multiple">
+          <li v-for="entry of entries" :key="entry.id">
+            {{entry.artist || '&lt;Unbekannter Artist>'}} &mdash; {{entry.title || '&lt;Unbekannter Titel>'}}
+            <span class="font-italic">({{entry.original_filename}})</span>
+          </li>
+        </ul>
+        <ul class="my-1" v-else-if="one">
+          <li>
+            {{entries[0].artist || '&lt;Unbekannter Artist>'}} &mdash; {{entries[0].title || '&lt;Unbekannter Titel>'}}
+            <span class="font-italic">({{entries[0].original_filename}})</span>
+          </li>
+        </ul>
+        wirklich löschen?
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="secondary" outlined @click="cancel">Abbrechen</v-btn>
+        <v-btn color="secondary" @click="remove">Löschen</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>

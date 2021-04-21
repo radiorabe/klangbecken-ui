@@ -124,9 +124,7 @@ export default {
           `${successes} von ${files.length} Dateien wurden erfolgreich hochgeladen`
         );
       }
-      //this.progress = 0
       this.uploading = false;
-      //this.$refs.fileupload.value = ''
     }
   }
 };

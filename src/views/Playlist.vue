@@ -1,8 +1,5 @@
 <template>
   <div>
-    <Edit :editing="editing" @done="editing = ''" />
-    <RemoveConfirmation :removing="removing" @done="afterRemoving" v-if="removing" />
-
     <v-card>
       <v-container fluid class="ma-0 pa-0">
         <v-row no-gutters justify="start">
@@ -144,7 +141,7 @@
                   :disabled="!isLoggedIn || !online"
                   class="ma-0"
                 >
-                  <v-icon x-small left>mdi-upload</v-icon>Play next
+                  <v-icon x-small left>mdi-upload</v-icon>Warteschlange
                 </v-btn>
               </p>
               <p class="mb-0 mr-0 flex-grow-0 text-right">
@@ -164,6 +161,8 @@
         </RecycleScroller>
       </v-card-text>
     </v-card>
+    <Edit :editing="editing" @done="editing = ''" />
+    <RemoveConfirmation :removing="removing" @done="afterRemoving" v-if="removing" />
   </div>
 </template>
 
