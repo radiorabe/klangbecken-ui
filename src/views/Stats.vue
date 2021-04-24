@@ -38,6 +38,7 @@ import { parse } from "papaparse";
 import { mapGetters } from "vuex";
 
 export default {
+  name: "stats",
   data() {
     return {
       headers: [

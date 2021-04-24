@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  name: "not-found",
   computed: {
     path() {
       return this.$route.params.pathMatch;

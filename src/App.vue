@@ -51,7 +51,9 @@
     </v-app-bar>
     <v-main>
       <v-container fluid>
-        <router-view :key="$route.fullPath" v-if="!loadingData" />
+        <keep-alive include="playlist">
+          <router-view :key="$route.fullPath" v-if="!loadingData" />
+        </keep-alive>
       </v-container>
     </v-main>
     <Login :show="showLogin" @done="showLogin = false" />
