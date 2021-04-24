@@ -93,6 +93,7 @@ import {version} from '../../package.json';
 const QUEUE_TIMEOUT = 3 * 1000;  // three seconds
 
 export default {
+  name: "info",
   data() {
       return {
         queue: [],
