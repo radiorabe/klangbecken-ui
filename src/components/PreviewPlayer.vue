@@ -1,12 +1,16 @@
 <template>
   <v-snackbar :value="isPreviewing" bottom multi-line :timeout="-1">
-    <audio :src="previewPath" v-on:ended="ended" autoplay controls></audio>
-    {{preview.artist}}
-    <br />
-    {{preview.title || preview.original_filename}}
-    <v-btn dark text v-on:click="ended">
-      <v-icon>mdi-close</v-icon>
-    </v-btn>
+    <v-container fluid class="flex-grow-1 d-flex justify-space-between align-center flex-nowrap px-0 py-2" style="margin-right: -12px; max-width:100%;">
+      <audio :src="previewPath" v-on:ended="ended" autoplay controls class="flex-grow-0 flex-shrink-0"></audio>
+      <div class="flex-grow-1 flex-shrink-1 text-truncate" style="min-width: 180px;">
+        <strong>{{preview.title || preview.original_filename}}</strong>
+        <br/>
+        von <em>{{preview.artist}}</em>
+      </div>
+      <v-btn dark text v-on:click="ended" class="flex-grow-0 flex-shrink-0 px-0 mx-0">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-container>
   </v-snackbar>
 </template>
 
