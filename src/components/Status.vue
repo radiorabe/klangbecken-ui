@@ -39,15 +39,19 @@ export default {
   computed: {
     ...mapGetters(["state", "data", "hasData", "info", "onAir"]),
     currentSong() {
-      if (this.onAir && this.hasData && this.info.current_track) {
+      if (this.onAir && this.hasData && this.info.current_track !== {}) {
         let id = this.info.current_track.id
-        let current = this.data[id]
-        if (current.title || current.artist) {
-          let artist = current.artist || "<Unknown Artist> ";
-          let title = current.title || "<Unknown Title> ";
-          return `Aktueller Song: ${artist} - ${title}`
+        if (id in this.data) {
+          let current = this.data[id]
+          if (current.title || current.artist) {
+            let artist = current.artist || "<Unbekannter Artist> ";
+            let title = current.title || "<Unbekannter Title> ";
+            return `Aktueller Track: ${artist} - ${title}`
+          } else {
+            return `Aktueller Track: ${current.original_filename}`;
+          }
         } else {
-          return `Aktueller Song: ${current.original_filename}`;
+          return "Aktueller Track: <Unbekannter Track>"
         }
       } else {
         return ""
