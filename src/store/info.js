@@ -4,6 +4,7 @@ export default {
     state: {
         state: "offline",
         info: {},
+        apiVersion: '',
         needReload: false,
     },
 
@@ -20,9 +21,13 @@ export default {
         setOffline: (state) => { state.state = "offline" },
         setNotRunning: (state) => {state.state = "not_running" },
         setInfo: (state, newInfo) => {
-            let oldVersion = state.info.api_version;
             state.info = newInfo;
-            if (oldVersion && oldVersion !== newInfo.api_version) {
+
+            let oldVersion = state.apiVersion;
+            let newVersion = newInfo.api_version;
+            if (!oldVersion && newVersion) {
+                state.apiVersion = newVersion
+            } else if (oldVersion && newVersion && oldVersion !== newVersion) {
                 state.needReload = true;
             }
         },
