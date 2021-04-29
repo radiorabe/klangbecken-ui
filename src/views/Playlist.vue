@@ -38,6 +38,7 @@
                 single-line
                 hide-details
                 clearable
+                @click:clear="search = ''"
                 @keyup.esc="search = ''"
                 color="primary"
                 class="ml-2 pa-0"
