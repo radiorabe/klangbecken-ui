@@ -18,11 +18,14 @@
         <v-col class="subtitle-1 font-weight-bold">Anstehende Tracks</v-col>
       </v-row>
       <template v-if="hasData">
-        <v-row v-for="[queue, artist, title] of nextSongs" :key="queue" class="mt-0">
-          <v-col lg=1 md=2 sm=3 class="subtitle-2">{{queue}}:</v-col>
-          <v-col lg=11 md=10 sm=9 class="subtitle-2 font-weight-regular">
+        <v-row v-for="[playlist, artist, title] of nextSongs" :key="playlist" class="mt-0">
+          <v-col lg=1 md=2 sm=3 class="subtitle-2">{{playlist}}:</v-col>
+          <v-col v-if="onAir && (artist || title)" lg=11 md=10 sm=9 class="subtitle-2 font-weight-regular">
             {{artist || '&lt;Unbekannter Artist&gt;'}} &mdash;
             {{title || '&lt;Unbekannter Titel&gt;'}}
+          </v-col>
+          <v-col v-else lg=11 md=10 sm=9 class="subtitle-2 font-weight-regular font-italic">
+            Noch kein Track eingeplant
           </v-col>
         </v-row>
       </template>
@@ -127,10 +130,12 @@ export default {
       let lst = []
       for (let playlist of Object.keys(playlists)) {
         let id = this.info[playlist]
+        let playlistName = playlists[playlist] ? playlists[playlist].name : "Warteschlange"
         if (id && id in this.data) {
           let track = this.data[id]
-          let playlistName = playlists[playlist] ? playlists[playlist].name : "Warteschlange"
           lst.push([playlistName, track.artist, track.title])
+        } else {
+          lst.push([playlistName])
         }
       }
       return lst
