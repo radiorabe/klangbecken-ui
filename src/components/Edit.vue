@@ -73,6 +73,18 @@
           <span class="ml-2">{{item.track_gain}}</span>
         </p>
         <p class="mb-0">
+          <span class="subtitle-1">Kanäle:</span>
+          <span class="ml-2">{{item.channels === 2 ? 'stereo': 'mono'}}</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Samplerate:</span>
+          <span class="ml-2">{{item.samplerate/1000}} kHz</span>
+        </p>
+        <p class="mb-0">
+          <span class="subtitle-1">Bitrate:</span>
+          <span class="ml-2">{{item.bitrate}} kbit/s</span>
+        </p>
+        <p class="mb-0">
           <span class="subtitle-1">Importdatum:</span>
           <span class="ml-2">{{item.import_timestamp.replace('T', ' ').substr(0,19)}}</span>
         </p>
