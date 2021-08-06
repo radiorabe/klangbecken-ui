@@ -58,7 +58,7 @@
           <span class="subtitle-1">Länge:</span>
           <span
             class="ml-2"
-          >{{toMinutes(item.length)}} ({{Math.round(100 * item.length) / 100}} s)</span>
+          >{{toMinutes(item.cue_out - item.cue_in)}} ({{Math.round(100 * (item.cue_out - item.cue_in)) / 100}} s)</span>
         </p>
         <p class="mb-0">
           <span class="subtitle-1">Cue in:</span>
@@ -92,6 +92,7 @@
           <span class="subtitle-1">Hochgeladen von:</span>
           <span class="ml-2">{{item.uploader}}</span>
         </p>
+
         <p class="mb-0">
           <span class="subtitle-1">ID:</span>
           <span class="ml-2">{{item.id}}</span>
