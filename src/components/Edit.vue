@@ -89,6 +89,10 @@
           <span class="ml-2">{{item.import_timestamp.replace('T', ' ').substr(0,19)}}</span>
         </p>
         <p class="mb-0">
+          <span class="subtitle-1">Hochgeladen von:</span>
+          <span class="ml-2">{{item.uploader}}</span>
+        </p>
+        <p class="mb-0">
           <span class="subtitle-1">ID:</span>
           <span class="ml-2">{{item.id}}</span>
         </p>
