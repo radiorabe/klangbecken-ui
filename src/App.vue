@@ -76,7 +76,7 @@ import Status from "@/components/Status.vue";
 import playlists from "@/playlists";
 
 const TOKEN_RENEW_TIMEOUT = 10 * 60 * 1000; // ten minutes
-const INFO_RENEW_TIMEOUT = 3 * 1000;
+const INFO_RENEW_TIMEOUT = 10 * 1000;  // ten seconds
 
 export default {
   name: "app",
