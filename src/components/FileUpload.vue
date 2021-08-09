@@ -57,7 +57,7 @@ export default {
     ...mapGetters(["isLoggedIn", "data", "online"])
   },
   methods: {
-    ...mapMutations(["error", "success", "addItem"]),
+    ...mapMutations(["error", "success", "addItems"]),
     ...mapActions(["updateMetadata"]),
 
     showUploadDialog() {
@@ -107,7 +107,7 @@ export default {
         this.processing = false;
         for (let result of results) {
           if (result.status === "fulfilled") {
-            this.addItem(result.value.data);
+            this.addItems(result.value.data);
             successes += 1;
           } else {
             this.error(result.reason.response.data.description);

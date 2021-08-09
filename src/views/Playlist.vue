@@ -225,7 +225,12 @@ export default {
       }
     },
     playlistSearchData() {
-      return index.search(this.search, { where: { playlist: this.playlist } });
+      let ids = index[this.playlist].search(this.search)
+      let results = []
+      for (let id of ids) {
+        results.push(this.data[id])
+      }
+      return results
     },
     playlistSortedData() {
       let playlist = Object.values(this.data).filter(
@@ -250,7 +255,6 @@ export default {
   },
   methods: {
     ...mapMutations([
-      "addItem",
       "updateItem",
       "removeItem",
       "setPreview",

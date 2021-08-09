@@ -1,7 +1,9 @@
 import Vue from "vue";
 import axios from "axios";
+import { Index } from "flexsearch";
 
 import index from "@/search";
+import playlists from "../playlists"
 
 export default {
   state: {
@@ -18,25 +20,36 @@ export default {
 
   mutations: {
     setData: (state, newData) => {
-      index.add(Object.values(newData));
+      for (let playlist of Object.keys(playlists)) {
+        index[playlist] = new Index(
+       {
+          preset: "performance",
+          tokenize: "forward",
+        }
+        )
+      }
+      for (let item of Object.values(newData)) {
+        index[item.playlist].add(item.id, `${item.artist} - ${item.title} - ${item.original_filename}`);
+      }
       state.data = newData;
       state.hasData = true;
     },
-    addItem: (state, item) => {
-      for (let key in item) {
-        index.add(item[key]);
-        Vue.set(state.data, key, item[key]);
+    addItems: (state, items) => {
+      for (let item of Object.values(items)) {
+        index[item.playlist].add(item.id, `${item.artist} - ${item.title} - ${item.original_filename}`);
+        Vue.set(state.data, item.id, item);
       }
     },
     removeItem: (state, itemId) => {
-      index.remove(state.data[itemId]);
+      index[state.data[itemId].playlist].remove(itemId);
       Vue.delete(state.data, itemId);
     },
     updateItem: (state, { itemId, modifications }) => {
       for (let key in modifications) {
         Vue.set(state.data[itemId], key, modifications[key]);
       }
-      index.update(state.data[itemId]);
+      let item = state.data[itemId]
+      index[item.playlist].update(itemId, `${item.artist} - ${item.title} - ${item.original_filename}`);
     },
     startLoading: (state) => (state.loading = true),
     endLoading: (state) => (state.loading = false),
