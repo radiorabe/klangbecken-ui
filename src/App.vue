@@ -101,6 +101,7 @@ export default {
   async created() {
     this.loadData();
     this.renewToken();
+    this.loadInfo();
     this.tokenInterval = setInterval(this.renewToken, TOKEN_RENEW_TIMEOUT);
     this.infoInterval = setInterval(this.loadInfo, INFO_RENEW_TIMEOUT, INFO_RENEW_TIMEOUT);
     axios.interceptors.response.use(
