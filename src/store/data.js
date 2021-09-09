@@ -67,6 +67,9 @@ export default {
       commit("endLoading");
     },
     async updateMetadata({ commit }, { entry, modifications }) {
+      if (Object.entries(modifications).every(([key, val])=> entry[key] === val)) {
+        return  // No changes
+      }
       try {
         let path = `/api/playlist/${entry.playlist}/${entry.id}.${entry.ext}`;
         await axios.put(path, modifications);
