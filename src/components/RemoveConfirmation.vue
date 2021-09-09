@@ -72,6 +72,7 @@ export default {
       for (let entry of entries) {
         try {
           await axios.delete(`/api/playlist/${entry.playlist}/${entry.id}.${entry.ext}`);
+          await axios.post(`/api/player/reload/${entry.playlist}`);
           this.removeItem(entry.id);
           this.success(`Datei '${entry.original_filename}' wurde gelöscht.`);
         } catch (err) {
