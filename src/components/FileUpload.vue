@@ -115,6 +115,7 @@ export default {
         }
         progress += promises.length;
       }
+      await axios.post(`/api/player/reload/${this.playlist}`);
       if (successes === files.length) {
         this.success(
           `Alle ${successes} Dateien wurden erfolgreich hochgeladen`

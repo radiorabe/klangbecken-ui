@@ -70,6 +70,9 @@ export default {
       try {
         let path = `/api/playlist/${entry.playlist}/${entry.id}.${entry.ext}`;
         await axios.put(path, modifications);
+        if (modifications.weight !== entry.weight) {
+          await axios.post(`/api/player/reload/${entry.playlist}`);
+        }
         commit("updateItem", { itemId: entry.id, modifications });
         commit("success", "Metadaten wurden gespeichert.");
       } catch (err) {
