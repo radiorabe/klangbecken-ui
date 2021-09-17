@@ -107,9 +107,11 @@
               class="mb-0 flex-grow-0 text-right caption text-truncate"
               v-if="hovering !== entry.id"
             >
-              <span>Dateiname: {{entry.original_filename}}</span>
+              <span>{{entry.original_filename}}</span>
               <br />
-              <span>Importiert am {{niceDate(entry.import_timestamp)}}</span>
+              <span>I: {{niceDate(entry.import_timestamp)}}</span>
+              <span> / </span>
+              <span>P: {{niceDate(entry.last_play) || 'Nie' }}</span>
             </p>
             <template v-else>
               <p class="mb-0 mr-1 flex-grow-0 text-right">
@@ -297,6 +299,9 @@ export default {
     },
     niceDate(timestamp) {
       let date = new Date(timestamp);
+      if (isNaN(date)) {
+        return
+      }
       let options = {
         weekday: "long",
         year: "numeric",
