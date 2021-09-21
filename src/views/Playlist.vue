@@ -303,10 +303,10 @@ export default {
         return
       }
       let options = {
-        weekday: "long",
+        weekday: "short",
         year: "numeric",
-        month: "long",
-        day: "numeric"
+        month: "2-digit",
+        day: "2-digit"
       };
 
       return date.toLocaleDateString("de-CH", options);
