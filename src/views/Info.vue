@@ -76,6 +76,10 @@
         <span class="subtitle-2 font-weight-regular">{{info.api_version}}</span>
       </p>
       <p class="mb-1">
+        <span class="subtitle-2 font-weight-bold">Python Version: </span>
+        <span class="subtitle-2 font-weight-regular">{{info.python_version}}</span>
+      </p>
+      <p class="mb-1">
         <span class="subtitle-2 font-weight-bold">Player Version: </span>
         <span class="subtitle-2 font-weight-regular">{{info.liquidsoap_version}}</span>
       </p>
