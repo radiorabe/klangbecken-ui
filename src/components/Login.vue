@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 
 export default {
   name: "Login",
@@ -57,9 +57,6 @@ export default {
     };
   },
   props: ["show"],
-  computed: {
-    ...mapGetters(["isLoggedIn", "username"])
-  },
   methods: {
     async tryLogin() {
       try {
@@ -81,7 +78,7 @@ export default {
       this.loginform = {};
       this.$emit("done");
     },
-    ...mapActions(["login", "logout"]),
+    ...mapActions(["login"]),
     ...mapMutations(["success", "error"])
   },
   watch: {

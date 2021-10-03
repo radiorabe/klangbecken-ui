@@ -173,7 +173,7 @@
 import "core-js/proposals/promise-all-settled";
 
 import axios from "axios";
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import { RecycleScroller } from "vue-virtual-scroller";
 
 import Edit from "@/components/Edit.vue";
@@ -256,14 +256,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([
-      "updateItem",
-      "removeItem",
-      "setPreview",
-      "success",
-      "error"
-    ]),
-    ...mapActions(["updateMetadata"]),
+    ...mapMutations(["setPreview", "success", "error"]),
     edit(entry) {
       this.editing = entry.id;
     },

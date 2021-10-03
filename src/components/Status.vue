@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Status",
@@ -58,9 +58,6 @@ export default {
       }
     }
   },
-  methods: {
-    ...mapMutations(["setOnline", "setOffline", "error"])
-  }
 };
 </script>
 

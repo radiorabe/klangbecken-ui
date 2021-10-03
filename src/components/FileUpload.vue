@@ -41,7 +41,7 @@
 
 <script>
 import axios from "axios";
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "FileUpload",
@@ -54,11 +54,10 @@ export default {
   },
   props: ["playlist"],
   computed: {
-    ...mapGetters(["isLoggedIn", "data", "online"])
+    ...mapGetters(["isLoggedIn", "online"])
   },
   methods: {
     ...mapMutations(["error", "success", "addItems"]),
-    ...mapActions(["updateMetadata"]),
 
     showUploadDialog() {
       this.$refs.fileupload.click();
