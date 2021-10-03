@@ -26,7 +26,7 @@ export default {
     ...mapGetters(["preview", "previewPath", "isPreviewing"])
   },
   methods: {
-    ...mapMutations(["setPreview", "clearPreview"]),
+    ...mapMutations(["clearPreview"]),
     ended() {
       this.clearPreview();
     }
