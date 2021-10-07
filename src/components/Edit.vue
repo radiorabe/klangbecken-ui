@@ -35,7 +35,7 @@
           label="Priorität"
           v-model="weight"
           min="0"
-          max="9"
+          max="5"
           :hint="weight ? '' : 'Abgestellt'"
           :color="weight ? 'primary': 'error'"
           :thumb-size="20"
