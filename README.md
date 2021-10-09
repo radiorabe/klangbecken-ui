@@ -1,5 +1,7 @@
 # klangbecken-ui
 
+This vue.js web client is the user interface app for the [Klangbecken project](https://github.com/radiorabe/klangbecken).
+
 ## Project setup
 ```bash
 npm install
@@ -58,3 +60,6 @@ It perfoms the following steps:
   - Tag the new commit with the new version number
   - Push it to the `upstream` repository.
 
+
+## Licence
+klangbecken-ui is released under the terms of the GNU General Public License. Copyright 2017-2021 Radio RaBe. See `LICENSE` for further information.
