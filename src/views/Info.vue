@@ -87,6 +87,14 @@
         <span class="subtitle-2 font-weight-bold">Player Uptime: </span>
         <span class="subtitle-2 font-weight-regular">{{info.uptime}}</span>
       </p>
+      <p class="mb-1">
+        <span class="subtitle-2 font-weight-bold">Klangbecken Integritätscheck: </span>
+        <span v-if="fsckReport === null" class="subtitle-2 font-weight-regular">Daten werden geladen ...</span>
+        <span v-else-if="fsckReport === false" class="subtitle-2 font-weight-regular">Daten konnten nicht geladen werden</span>
+        <span v-else-if="fsckReport === ''" class="subtitle-2 font-weight-regular">OK</span>
+        <span v-else class="subtitle-2">Nicht OK</span>
+      </p>
+      <pre v-if="fsckReport" class="mb-1 mx-3 py-1 px-2 warning">{{fsckReport}}</pre>
     </v-card-subtitle>
   </v-card>
 </template>
@@ -106,10 +114,12 @@ export default {
         queue: [],
         queueInterval: null,
         version: version,
+        fsckReport: null,
       }
   },
   created() {
     this.loadQueue();
+    this.loadFsckReport();
     this.queueInterval = setInterval(this.loadQueue, QUEUE_TIMEOUT);
   },
   beforeDestroy() {
@@ -153,6 +163,15 @@ export default {
         this.queue = response.data
       } catch (err) {
         this.error(err)
+      }
+    },
+    async loadFsckReport() {
+      try {
+        let response = await axios.get('/data/log/fsck.log')
+        this.fsckReport = response.data.trim()
+      } catch (err) {
+        this.error('Daten zum Integritätscheck konnten nicht geladen werden')
+        this.fsckReport = false
       }
     },
     async queueRemove(queue_id) {
