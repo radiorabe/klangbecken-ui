@@ -148,14 +148,12 @@ export default {
   methods: {
     ...mapMutations(["error"]),
     async loadQueue() {
-      if (this.isLoggedIn) {
       try {
         let response = await axios.get('/api/player/queue/');
         this.queue = response.data
       } catch (err) {
         this.error(err)
       }
-    }
     },
     async queueRemove(queue_id) {
       try {
