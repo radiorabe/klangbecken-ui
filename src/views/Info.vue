@@ -101,7 +101,7 @@
 
 <script>
 import axios from "axios";
-import { mapGetters, mapMutations} from "vuex";
+import { mapGetters, mapMutations, mapActions} from "vuex";
 import playlists from "@/playlists"
 import {version} from '../../package.json';
 
@@ -118,6 +118,7 @@ export default {
       }
   },
   created() {
+    this.loadInfo();
     this.loadQueue();
     this.loadFsckReport();
     this.queueInterval = setInterval(this.loadQueue, QUEUE_TIMEOUT);
@@ -157,6 +158,7 @@ export default {
   },
   methods: {
     ...mapMutations(["error"]),
+    ...mapActions(["loadInfo"]),
     async loadQueue() {
       try {
         let response = await axios.get('/api/player/queue/');
