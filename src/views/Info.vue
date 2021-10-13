@@ -97,7 +97,7 @@ import { mapGetters, mapMutations} from "vuex";
 import playlists from "@/playlists"
 import {version} from '../../package.json';
 
-const QUEUE_TIMEOUT = 3 * 1000;  // three seconds
+const QUEUE_TIMEOUT = 10 * 1000;  // ten seconds
 
 export default {
   name: "info",
