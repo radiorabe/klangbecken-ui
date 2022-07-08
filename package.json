@@ -24,7 +24,7 @@
     "@vue/cli-plugin-babel": "5.0.6",
     "@vue/cli-plugin-eslint": "5.0.6",
     "@vue/cli-plugin-router": "5.0.6",
-    "@vue/cli-plugin-vuex": "5.0.6",
+    "@vue/cli-plugin-vuex": "5.0.8",
     "@vue/cli-service": "5.0.6",
     "babel-eslint": "10.1.0",
     "eslint": "7.32.0",
