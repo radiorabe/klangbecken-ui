@@ -208,6 +208,9 @@ export default {
     playlistShowWeights() {
       return playlists[this.playlist].weights;
     },
+    playlistShowExpiration() {
+      return playlists[this.playlist].expirable;
+    },
     orderItems() {
       let orders = [
         { text: "Importdatum (Neuste zuerst)", value: "-import_timestamp" },

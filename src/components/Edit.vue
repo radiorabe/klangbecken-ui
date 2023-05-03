@@ -42,6 +42,18 @@
           thumb-label="always"
           class="mt-5"
         ></v-slider>
+        <v-date-picker
+          v-if="showExpiration"
+          label="Enddatum"
+          v-model="expiration"
+          full-width
+          first-day-of-week="1"
+        >
+          <v-btn
+            text color="primary"
+            @click="expiration=''">Ablaufdatum Entfernen
+          </v-btn>
+        </v-date-picker>
         <p class="mt-2 mb-0">
           <span class="subtitle-1">Dateiname:</span>
           <span class="ml-2">{{item.original_filename}}</span>
@@ -122,7 +134,8 @@ export default {
     return {
       artist: "",
       title: "",
-      weight: 0
+      weight: 0,
+      expiration: "",
     };
   },
   props: ["editing"],
@@ -140,6 +153,9 @@ export default {
     },
     showWeight() {
       return this.$parent.playlistShowWeights;
+    },
+    showExpiration() {
+      return this.$parent.playlistShowExpiration;
     }
   },
 
@@ -155,7 +171,8 @@ export default {
         modifications: {
           artist: this.artist,
           title: this.title,
-          weight: this.weight
+          weight: this.weight,
+          expiration: this.expiration ? this.expiration+"T23:59:59.000Z" : "",
         }
       });
     },
