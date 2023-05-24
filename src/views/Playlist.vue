@@ -100,7 +100,10 @@
                 (Plays: {{entry.play_count}}
                 <span
                   v-if="playlistShowWeights"
-                >&mdash; Priorität: {{entry.weight}}</span>)
+                >&mdash; Priorität: {{entry.weight}}</span>
+                <span
+                  v-if="playlistShowExpiration && entry.expiration"
+                >&mdash; Ablaufdatum: {{entry.expiration.split("T")[0]}}</span>)
               </span>
             </p>
             <p
