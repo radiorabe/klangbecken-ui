@@ -11,7 +11,9 @@
       :style="{bottom: (8 + index * 70) + 'px'}"
       @input="update"
     >
-      {{entry.text}}
+      <span class="font-weight-bold">
+        {{entry.text}}
+      </span>
       <v-btn dark text v-on:click="hide(entry)">
         <v-icon>mdi-close</v-icon>
       </v-btn>

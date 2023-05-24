@@ -177,7 +177,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["error"]),
+    ...mapMutations(["error", "warning"]),
     ...mapActions(["updateMetadata"]),
     tabbyEnter() {
       this.$refs.title.focus();
@@ -192,6 +192,9 @@ export default {
           expiration: this.expiration ? this.expiration+"T23:59:59.000Z" : "",
         }
       });
+      if (this.expiration && this.expiration < (new Date()).toISOString()) {
+        this.warning("Achtung: Das Ablaufdatum liegt in der Vergangenheit.");
+      }
     },
     cancel() {
       this.$emit("done");
