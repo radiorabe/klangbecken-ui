@@ -42,18 +42,31 @@
           thumb-label="always"
           class="mt-5"
         ></v-slider>
-        <v-date-picker
-          v-if="showExpiration"
-          label="Enddatum"
-          v-model="expiration"
-          full-width
-          first-day-of-week="1"
+        <v-menu
+        v-model="showDatePicker"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+        v-if="showExpiration"
         >
-          <v-btn
-            text color="primary"
-            @click="expiration=''">Ablaufdatum Entfernen
-          </v-btn>
-        </v-date-picker>
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="expiration"
+            label="Ablaufdatum"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+            clearable
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          v-model="expiration"
+          @input="showDatePicker = false"
+          first-day-of-week="1"
+        ></v-date-picker>
+        </v-menu>
         <p class="mt-2 mb-0">
           <span class="subtitle-1">Dateiname:</span>
           <span class="ml-2">{{item.original_filename}}</span>
@@ -136,6 +149,7 @@ export default {
       title: "",
       weight: 0,
       expiration: "",
+      showDatePicker: false,
     };
   },
   props: ["editing"],
@@ -224,6 +238,8 @@ export default {
         this.artist = this.data[this.editing].artist;
         this.title = this.data[this.editing].title;
         this.weight = this.data[this.editing].weight;
+        this.expiration = this.data[this.editing].expiration.split("T")[0];
+        this.showDatePicker = false;
 
         await this.$nextTick();
         this.$refs.artist.focus();
