@@ -14,6 +14,7 @@
         <v-text-field
           label="Artist"
           ref="artist"
+          prepend-inner-icon="mdi-human"
           required
           autofocus
           v-model="artist"
@@ -24,6 +25,7 @@
         <v-text-field
           label="Title"
           ref="title"
+          prepend-inner-icon="mdi-music"
           required
           v-model="title"
           @keyup.enter="save"
@@ -55,6 +57,7 @@
           <v-text-field
             v-model="expiration"
             label="Ablaufdatum"
+            prepend-inner-icon="mdi-calendar"
             readonly
             v-bind="attrs"
             v-on="on"
