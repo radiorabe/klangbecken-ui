@@ -14,6 +14,9 @@ export default {
     success: (state, message) => {
       state.notifications.push({ type: "success", message });
     },
+    warning: (state, message) => {
+      state.notifications.push({ type: "warning", message });
+    },
     popNotification: (state) => {
       return state.notifications.shift();
     },
