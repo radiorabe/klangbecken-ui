@@ -77,9 +77,9 @@ export default {
           await axios.post(`/api/player/reload/${entry.playlist}`);
         }
         commit("updateItem", { itemId: entry.id, modifications });
-        commit("success", "Metadaten wurden gespeichert.");
+        commit("success", "Die Änderungen wurden gespeichert.");
       } catch (err) {
-        commit("error", "Metadaten konnten nicht gespeichert werden.");
+        commit("error", "Die Änderungen konnten nicht gespeichert werden.");
       }
     },
   },

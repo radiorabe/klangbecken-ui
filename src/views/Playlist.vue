@@ -103,7 +103,7 @@
                 >&mdash; Priorität: {{entry.weight}}</span>
                 <span
                   v-if="playlistShowExpiration && entry.expiration"
-                >&mdash; Ablaufdatum: {{entry.expiration.split("T")[0]}}</span>)
+                >&mdash; Ablaufdatum: {{niceDate(entry.expiration)}}</span>)
               </span>
             </p>
             <p
