@@ -99,9 +99,9 @@ export default {
     ...mapGetters(["isLoggedIn", "username", "loadingData", "needReload"])
   },
   async created() {
-    this.loadData();
+    await this.loadInfo();
     this.renewToken();
-    this.loadInfo();
+    this.loadData();
     this.tokenInterval = setInterval(this.renewToken, TOKEN_RENEW_TIMEOUT);
     this.infoInterval = setInterval(this.loadInfo, INFO_RENEW_TIMEOUT, INFO_RENEW_TIMEOUT);
     axios.interceptors.response.use(

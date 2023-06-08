@@ -34,8 +34,7 @@ export default {
     },
 
     actions: {
-        async loadInfo(o, timeout) {
-            let {commit, getters, dispatch} = o
+        async loadInfo({commit, getters}, timeout) {
             try {
                 let response = await axios.get("/api/player/", {
                   timeout: (timeout || 1000) - 100,
@@ -46,7 +45,6 @@ export default {
                 commit("setInfo", response.data)
                 if (getters.state !== "online") {
                     commit("setOnline")
-                    dispatch("renewToken")
                 }
             } catch (err) {
                 if (err.message === "Network Error" || err.message.startsWith("timeout")) {
