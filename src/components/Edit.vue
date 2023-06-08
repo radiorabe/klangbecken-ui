@@ -183,16 +183,22 @@ export default {
       this.$refs.title.focus();
     },
     save() {
+
+      var expiration =
+        this.expiration ?
+        (new Date(this.expiration+"T23:59:59.000")).toISOString()
+          .replace("Z","+00:00")
+        : "";
       this.updateMetadata({
         entry: this.data[this.editing],
         modifications: {
           artist: this.artist,
           title: this.title,
           weight: this.weight,
-          expiration: this.expiration ? this.expiration+"T23:59:59.000Z" : "",
+          expiration: expiration,
         }
       });
-      if (this.expiration && this.expiration < (new Date()).toISOString()) {
+      if (expiration && (new Date(expiration)) < (new Date())) {
         this.warning("Achtung: Das Ablaufdatum liegt in der Vergangenheit.");
       }
     },
