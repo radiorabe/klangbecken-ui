@@ -11,7 +11,7 @@
     "@mdi/font": "7.2.96",
     "axios": "1.4.0",
     "core-js": "3.31.0",
-    "flexsearch": "0.7.21",
+    "flexsearch": "0.7.31",
     "papaparse": "5.4.1",
     "roboto-fontface": "*",
     "vue": "2.7.14",
