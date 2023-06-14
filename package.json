@@ -14,7 +14,7 @@
     "flexsearch": "0.7.21",
     "papaparse": "5.4.1",
     "roboto-fontface": "*",
-    "vue": "2.7.2",
+    "vue": "2.7.14",
     "vue-router": "3.5.4",
     "vue-virtual-scroller": "1.1.2",
     "vuetify": "2.6.15",
@@ -32,7 +32,7 @@
     "sass": "1.53.0",
     "sass-loader": "13.3.2",
     "vue-cli-plugin-vuetify": "2.5.8",
-    "vue-template-compiler": "2.7.2",
+    "vue-template-compiler": "2.7.14",
     "vuetify-loader": "1.9.2"
   },
   "eslintConfig": {
