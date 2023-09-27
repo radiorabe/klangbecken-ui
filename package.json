@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "7.2.96",
-    "axios": "1.5.0",
+    "axios": "1.5.1",
     "core-js": "3.32.2",
     "flexsearch": "0.7.31",
     "papaparse": "5.4.1",
